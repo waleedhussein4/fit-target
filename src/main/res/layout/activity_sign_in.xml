@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/dark"
+    tools:context=".SignInActivity">
+
+    <ImageView
+        android:id="@+id/smallLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="340dp"
+        android:layout_gravity="center"
+        android:src="@drawable/small"
+        android:contentDescription="Logo" />
+
+
+    <TextView
+        android:id="@+id/journeyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="BACK AGAIN? TARGET TIME!"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
+    <View
+        android:layout_width="363dp"
+        android:layout_height="7dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:background="@color/white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+
+        <TextView
+            android:id="@+id/emailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email Address:"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_alignParentStart="true" />
+
+
+        <TextView
+            android:id="@+id/SignInAsteriks"
+            android:layout_width="17dp"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textSize="24sp"
+            android:textColor="@color/gold"
+            android:layout_toEndOf="@id/emailText"
+            android:layout_alignBaseline="@id/emailText"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:fontFamily="sans-serif-medium"
+        android:hint="e.g: john.doe@gmail.com"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+    <TextView
+        android:id="@+id/passwordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Password:"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/SignUpAsteriks"
+            android:layout_width="17dp"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textSize="24sp"
+            android:textColor="@color/gold"
+            android:layout_toEndOf="@id/passwordText"
+            android:layout_alignBaseline="@id/passwordText"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:hint="Password"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:inputType="textPassword" />
+
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="46dp" />
+
+    <Button
+        android:id="@+id/signInButton"
+        android:layout_width="188dp"
+        android:layout_height="59dp"
+        android:layout_gravity="center"
+        android:background="@drawable/rounded_button"
+        android:text="LET’S GO!"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+</LinearLayout>
