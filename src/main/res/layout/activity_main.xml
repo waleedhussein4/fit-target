@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark"
+
+    android:orientation="vertical"
+
+    android:padding="16dp">
+
+    <ImageView
+
+        android:id="@+id/logo"
+        android:layout_width="318dp"
+        android:layout_height="348dp"
+        android:layout_gravity="center"
+        android:src="@drawable/small"
+
+        />
+
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="59dp"
+        android:layout_gravity="center"
+
+        android:layout_marginBottom="32dp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.1"
+        android:text="WELCOME TO FIT TARGET"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/smallMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_gravity="center"
+
+        android:text="Crush your goals with personalized plans!"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="italic|bold" />
+
+
+    <View
+        android:layout_width="363dp"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/existingMsg"
+        android:layout_width="314dp"
+        android:layout_height="132dp"
+        android:paddingTop="100dp"
+        android:text="Already have an account?"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="italic" />
+
+    <Button
+        android:id="@+id/btnSignIn"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.05"
+        android:padding="20dp"
+        android:text="Sign In"
+        android:textColor="@color/white"
+
+        android:textColorLink="@color/gold"
+        android:textSize="18sp"
+        app:rippleColor= "@color/gold" />
+
+    <TextView
+        android:id="@+id/newMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New here?"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="italic" />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.05"
+        android:padding="20dp"
+        android:text="Sign Up"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+
+
+        app:rippleColor= "@color/gold" />
+
+</LinearLayout>
+
+
