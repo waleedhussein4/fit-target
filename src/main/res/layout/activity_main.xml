@@ -103,9 +103,8 @@
         android:text="Sign Up"
         android:textColor="@color/white"
         android:textSize="18sp"
-
-
-        app:rippleColor= "@color/gold" />
+        app:rippleColor= "@color/gold"
+        />
 
 </LinearLayout>
 

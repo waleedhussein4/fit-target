@@ -75,7 +75,7 @@
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:fontFamily="sans-serif-medium"
-        android:hint="e.g: john.doe@gmail.com"
+        android:hint=" john.doe@gmail.com"
         android:padding="12dp"
         android:textColor="@color/black"
         android:textColorHint="@color/black" />
