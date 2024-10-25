@@ -1,6 +1,13 @@
 package com.example.fittarget;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +27,114 @@ public class SignUpActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Button readyBtn = findViewById(R.id.readyButton);
+        readyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                EditText nameEdit = findViewById(R.id.nameEditText);
+                EditText emailEdit = findViewById(R.id.emailEditText);
+                EditText passwordEdit = findViewById(R.id.passwordEditText);
+                EditText ageEdit = findViewById(R.id.ageEditText);
+                EditText heightEdit = findViewById(R.id.heightEditText);
+                EditText weightEdit = findViewById(R.id.weightEditText);
+                RadioGroup genderGroup = findViewById(R.id.genderRadioGroup);
+                RadioGroup weightMGroup = findViewById(R.id.preferenceGroup);
+                RadioGroup weightCGroup = findViewById(R.id.weightControlChoice);
+                EditText weightTarget = findViewById(R.id.targetEditText);
+                EditText weightPeriod = findViewById(R.id.periodTargetEditText);
+                TextView genderText = findViewById(R.id.genderTextView);
+                TextView measText = findViewById(R.id.measurementPrefTextView);
+                TextView weight_control = findViewById(R.id.weightControlTextView);
+
+                boolean isValid = true;
+
+                String name = nameEdit.getText().toString().trim();
+                if (name.isEmpty()) {
+                    nameEdit.setError("Name is required");
+                    isValid = false;
+                }
+
+                String email = emailEdit.getText().toString().trim();
+                if (email.isEmpty()) {
+                    emailEdit.setError("Email is required");
+                    isValid = false;
+                }
+
+                String password = passwordEdit.getText().toString().trim();
+                if (password.isEmpty()) {
+                    passwordEdit.setError("Password is required");
+                    isValid = false;
+                }
+
+                String age = ageEdit.getText().toString().trim();
+                if (age.isEmpty()) {
+                    ageEdit.setError("Age is required");
+                    isValid = false;
+                }
+
+                String height = heightEdit.getText().toString().trim();
+                if (height.isEmpty()) {
+                    heightEdit.setError("Height is required");
+                    isValid = false;
+                }
+
+                String weight = weightEdit.getText().toString().trim();
+                if (weight.isEmpty()) {
+                    weightEdit.setError("Weight is required");
+                    isValid = false;
+                }
+                genderGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                    if (checkedId != -1) {
+                        genderText.setError(null);
+                    }
+                });
+                int selectedGenderId = genderGroup.getCheckedRadioButtonId();
+                if (selectedGenderId == -1) { // No option selected
+                    genderText.setError("Gender selection is required");
+                    isValid = false;
+                }
+                weightMGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                    if (checkedId != -1) {
+                        measText.setError(null);
+                    }
+                });
+                int selectedMeasurement = weightMGroup.getCheckedRadioButtonId();
+                if (selectedMeasurement == -1) {
+                    measText.setError("Measurement preference is required");
+                    isValid = false;
+                }
+                weightCGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                    if (checkedId != -1) {
+                        weight_control.setError(null);
+                    }
+                });
+                int selectedControl = weightCGroup.getCheckedRadioButtonId();
+                if (selectedControl == -1) {
+                    weight_control.setError("Weight control choice is required");
+                    isValid = false;
+                }
+
+                String weight_target = weightTarget.getText().toString().trim();
+                if (weight_target.isEmpty()) {
+                    weightTarget.setError("Weight target is required");
+                    isValid = false;
+
+                }
+
+                String weight_period = weightPeriod.getText().toString().trim();
+                if (weight_period.isEmpty()) {
+                    weightPeriod.setError("Weight period is required");
+                    isValid = false;
+
+                }
+                if (isValid){
+                    Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }
+

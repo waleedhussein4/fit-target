@@ -93,7 +93,7 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
         <TextView
-            android:id="@+id/SignUpAsteriks"
+            android:id="@+id/SignAsteriks"
             android:layout_width="17dp"
             android:layout_height="wrap_content"
             android:text="*"

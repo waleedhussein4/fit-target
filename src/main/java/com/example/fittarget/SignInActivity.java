@@ -1,6 +1,8 @@
 package com.example.fittarget;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
@@ -21,19 +23,26 @@ public class SignInActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        EditText emailEditText = findViewById(R.id.emailEditText);
-        String email = emailEditText.getText().toString();
-
-        if (email.isEmpty()) {
-            emailEditText.setError("Email is required!");
-        }
-        EditText passwordEditText = findViewById(R.id.passwordEditText);
-        String password = passwordEditText.getText().toString();
-        if(password.isEmpty()){
-            passwordEditText.setError("Password is required!");
-        }
-
-
+        Button goBtn = findViewById(R.id.signInButton);
+        goBtn.setOnClickListener(view -> {
+                    Boolean isValid = true;
+                    EditText emailEditText = findViewById(R.id.emailEditText);
+                    String email = emailEditText.getText().toString();
+                    if (email.isEmpty()) {
+                        emailEditText.setError("Email is required!");
+                        isValid=false;
+                    }
+                    EditText passwordEditText = findViewById(R.id.passwordEditText);
+                    String password = passwordEditText.getText().toString();
+                    if(password.isEmpty()){
+                        passwordEditText.setError("Password is required!");
+                        isValid=false;
+                    }
+                    if(isValid){
+                        Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
+                        startActivity(intent);
+                    }
+                });
 
     }
 }
