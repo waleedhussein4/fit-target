@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Fit Target</string>
+
+    <!-- Muscle group options for the Spinner -->
+    <string-array name="muscle_groups">
+        <item>Legs</item>
+        <item>Arms</item>
+        <item>Shoulder</item>
+        <item>Back</item>
+        <item>Chest</item>
+    </string-array>
 </resources>

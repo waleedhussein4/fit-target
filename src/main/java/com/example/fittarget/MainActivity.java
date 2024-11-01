@@ -44,5 +44,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     });
+
+        // New View Analytics Button
+        Button viewAnalyticsButton = findViewById(R.id.btnViewAnalytics);
+        viewAnalyticsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ViewAnalyticsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

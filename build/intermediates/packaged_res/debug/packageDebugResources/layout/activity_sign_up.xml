@@ -1,0 +1,512 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/dark"
+
+    tools:context=".SignUpActivity">
+
+
+    <ImageView
+        android:id="@+id/titleLogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/title" />
+
+    <TextView
+        android:id="@+id/motivationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="READY FOR THE NEXT LEVEL?"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        android:layout_marginBottom="12dp" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:background="@color/gold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Full Name:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/nameAsteriks"
+            android:layout_width="17dp"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textSize="24sp"
+            android:textColor="@color/gold"
+            android:layout_toEndOf="@id/nameTextView"
+            android:layout_alignBaseline="@id/nameTextView"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:inputType="text"
+        android:hint="John Doe"
+        android:padding="12dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/genderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+    <TextView
+        android:id="@+id/genderAsteriks"
+        android:layout_width="17dp"
+        android:layout_height="wrap_content"
+        android:text="*"
+        android:textSize="24sp"
+        android:textColor="@color/gold"
+        android:layout_toEndOf="@id/genderTextView"
+        android:layout_alignBaseline="@id/genderTextView"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="-8dp" />
+
+</RelativeLayout>
+
+    <RadioGroup
+        android:id="@+id/genderRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/maleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:textSize="16sp"
+            android:buttonTint="@color/gold"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/femaleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:textSize="16sp"
+            android:buttonTint="@color/gold"
+            android:textColor="@color/white"
+            android:layout_marginStart="32dp" />
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email Address:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+    <TextView
+        android:id="@+id/emailAsteriks"
+        android:layout_width="17dp"
+        android:layout_height="wrap_content"
+        android:text="*"
+        android:textSize="24sp"
+        android:textColor="@color/gold"
+        android:layout_toEndOf="@id/emailTextView"
+        android:layout_alignBaseline="@id/emailTextView"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="-8dp" />
+
+</RelativeLayout>
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint=" john.doe@gmail.com"
+        android:inputType="textEmailAddress"
+        android:background="@color/white"
+        android:padding="12dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/passwordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+<TextView
+android:id="@+id/passwordAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/passwordTextView"
+android:layout_alignBaseline="@id/passwordTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="12dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/ageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+<TextView
+android:id="@+id/ageAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/ageTextView"
+android:layout_alignBaseline="@id/ageTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/ageEditText"
+        android:layout_width="118dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:hint="18"
+        android:inputType="number"
+        android:padding="12dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/heightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Height (cm):"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+<TextView
+android:id="@+id/heightAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/heightTextView"
+android:layout_alignBaseline="@id/heightTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/heightEditText"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:hint="170"
+        android:inputType="number"
+        android:padding="12dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/weightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight (kg):"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+<TextView
+android:id="@+id/weightAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/weightTextView"
+android:layout_alignBaseline="@id/weightTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/weightEditText"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:hint="72"
+        android:inputType="numberDecimal"
+        android:padding="12dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/measurementPrefTextView"
+        android:text="Weight Measurement preference:"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        />
+<TextView
+android:id="@+id/measAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/measurementPrefTextView"
+android:layout_alignBaseline="@id/measurementPrefTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+    <RadioGroup
+        android:id="@+id/preferenceGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        >
+        <RadioButton
+            android:id="@+id/dailyButton"
+            android:text="Daily"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:buttonTint="@color/gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <RadioButton
+            android:id="@+id/weeklyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:text="Weekly"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:buttonTint="@color/gold"
+            />
+
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/weightControlTextView"
+        android:text="Weight Control:"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+<TextView
+android:id="@+id/wAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/weightControlTextView"
+android:layout_alignBaseline="@id/weightControlTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+    <RadioGroup
+        android:id="@+id/weightControlChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <RadioButton
+            android:id="@+id/gainButton"
+            android:text="Gain Weight"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:buttonTint="@color/gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <RadioButton
+            android:id="@+id/loseButton"
+            android:text="Lose Weight"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:buttonTint="@color/gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            />
+
+    </RadioGroup>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/targetTextView"
+        android:text="Weight Target (kg):"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        />
+<TextView
+android:id="@+id/tAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/targetTextView"
+android:layout_alignBaseline="@id/targetTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/targetEditText"
+        android:layout_width="115dp"
+        android:layout_height="41dp"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:hint="72" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+    <TextView
+        android:id="@+id/periodTextView"
+        android:text="Period Target (days):"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        />
+<TextView
+android:id="@+id/pAsteriks"
+android:layout_width="17dp"
+android:layout_height="wrap_content"
+android:text="*"
+android:textSize="24sp"
+android:textColor="@color/gold"
+android:layout_toEndOf="@id/periodTextView"
+android:layout_alignBaseline="@id/periodTextView"
+android:layout_marginStart="4dp"
+android:layout_marginTop="-8dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/periodTargetEditText"
+        android:layout_width="117dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:inputType="number"
+        android:background="@color/white"
+        android:hint="60" />
+
+    <View
+        android:layout_width="433dp"
+        android:layout_height="24dp"
+        android:background="@color/dark" />
+
+    <Button
+        android:id="@+id/readyButton"
+        android:layout_width="231dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/rounded_button"
+        android:text="READY!"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+
+        />
+</LinearLayout>
+
+</ScrollView>
