@@ -50,17 +50,11 @@ public class SignUpActivity extends AppCompatActivity {
                 TextView genderText = findViewById(R.id.genderTextView);
                 TextView measText = findViewById(R.id.measurementPrefTextView);
                 TextView weight_control = findViewById(R.id.weightControlTextView);
-               int genderButtonId = genderGroup.getCheckedRadioButtonId();
-               RadioButton genderButton = findViewById(genderButtonId);
-               String gender = genderButton.getText().toString();
-               int measButtonId = weightMGroup.getCheckedRadioButtonId();
-               RadioButton measButton = findViewById(measButtonId);
-               String measurement = measButton.getText().toString();
-               int controlButtonId = weightCGroup.getCheckedRadioButtonId();
-               RadioButton controlButton = findViewById(controlButtonId);
-               String weight_control_choice = controlButton.getText().toString();
 
 
+                final String[] genderHolder = {""};
+                final String[] measHolder ={""};
+                final String[] weight_control_holder = {""};
                 boolean isValid = true;
 
                 String name = nameEdit.getText().toString().trim();
@@ -108,6 +102,12 @@ public class SignUpActivity extends AppCompatActivity {
                     genderText.setError("Gender selection is required");
                     isValid = false;
                 }
+                else {
+                    int genderButtonId = genderGroup.getCheckedRadioButtonId();
+                    RadioButton genderButton = findViewById(genderButtonId);
+                    genderHolder[0]= genderButton.getText().toString();
+                }
+                String gender = genderHolder[0];
                 weightMGroup.setOnCheckedChangeListener((group, checkedId) -> {
                     if (checkedId != -1) {
                         measText.setError(null);
@@ -119,6 +119,12 @@ public class SignUpActivity extends AppCompatActivity {
                     measText.setError("Measurement preference is required");
                     isValid = false;
                 }
+                else {
+                    int measButtonId = weightMGroup.getCheckedRadioButtonId();
+                    RadioButton measButton = findViewById(measButtonId);
+                   measHolder[0] = measButton.getText().toString();
+                }
+                String measurement = measHolder[0];
                 weightCGroup.setOnCheckedChangeListener((group, checkedId) -> {
                     if (checkedId != -1) {
                         weight_control.setError(null);
@@ -129,7 +135,12 @@ public class SignUpActivity extends AppCompatActivity {
                     weight_control.setError("Weight control choice is required");
                     isValid = false;
                 }
-
+                else {
+                    int controlButtonId = weightCGroup.getCheckedRadioButtonId();
+                    RadioButton controlButton = findViewById(controlButtonId);
+                    weight_control_holder[0] = controlButton.getText().toString();
+                }
+                String weight_control_choice = weight_control_holder[0];
                 String weight_target = weightTarget.getText().toString().trim();
                 if (weight_target.isEmpty()) {
                     weightTarget.setError("Weight target is required");
@@ -143,8 +154,12 @@ public class SignUpActivity extends AppCompatActivity {
                     isValid = false;
 
                 }
+                FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(SignUpActivity.this);
+                if (fitTargetDatabaseHelper.isEmailUsed(email)) {
+                    emailEdit.setError("Email is already in use. Please choose another email.");
+                }
                 if (isValid){
-                    FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(SignUpActivity.this);
+
                     db = fitTargetDatabaseHelper.getWritableDatabase();
                     fitTargetDatabaseHelper.insertUser(db,name,email,password,Integer.parseInt(age),Integer.parseInt(weight),
                             Integer.parseInt(height),gender, measurement, weight_control_choice,Integer.parseInt(weight_target),

@@ -2,6 +2,7 @@ package com.example.fittarget;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -63,6 +64,22 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
+    public boolean isEmailUsed(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                "USER_INFO",
+                new String[]{"EMAIL"},
+                "EMAIL = ?",
+                new String[]{email},
+                null, null, null
+        );
+
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        db.close();
+        return exists;
+    }
+
 
 
 }
