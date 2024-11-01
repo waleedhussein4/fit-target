@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "fit_target_database";
+    private static String DB_NAME =  "fit_target_database";
     private static int DB_VERSION = 1;
     FitTargetDatabaseHelper(Context context ){
         super(context,DB_NAME,null,DB_VERSION);

@@ -70,8 +70,8 @@ public class SignInActivity extends AppCompatActivity {
                                 passwordEditText.setError("Incorrect Password. Please try again!");
                             }
                         } else {
-                                isValid = false;
-                            emailEditText.setError("Incorrect Email. Please try again!");
+                                 isValid = false;
+                            emailEditText.setError("Incorrect Email! Please try again!");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+             return insets;
         });
         Button readyBtn = findViewById(R.id.readyButton);
         readyBtn.setOnClickListener(new View.OnClickListener() {
