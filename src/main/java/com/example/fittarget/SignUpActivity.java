@@ -1,10 +1,12 @@
 package com.example.fittarget;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    private SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,16 @@ public class SignUpActivity extends AppCompatActivity {
                 TextView genderText = findViewById(R.id.genderTextView);
                 TextView measText = findViewById(R.id.measurementPrefTextView);
                 TextView weight_control = findViewById(R.id.weightControlTextView);
+               int genderButtonId = genderGroup.getCheckedRadioButtonId();
+               RadioButton genderButton = findViewById(genderButtonId);
+               String gender = genderButton.getText().toString();
+               int measButtonId = weightMGroup.getCheckedRadioButtonId();
+               RadioButton measButton = findViewById(measButtonId);
+               String measurement = measButton.getText().toString();
+               int controlButtonId = weightCGroup.getCheckedRadioButtonId();
+               RadioButton controlButton = findViewById(controlButtonId);
+               String weight_control_choice = controlButton.getText().toString();
+
 
                 boolean isValid = true;
 
@@ -99,6 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (checkedId != -1) {
                         measText.setError(null);
                     }
+
                 });
                 int selectedMeasurement = weightMGroup.getCheckedRadioButtonId();
                 if (selectedMeasurement == -1) {
@@ -130,6 +144,13 @@ public class SignUpActivity extends AppCompatActivity {
 
                 }
                 if (isValid){
+                    FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(SignUpActivity.this);
+                    db = fitTargetDatabaseHelper.getWritableDatabase();
+                    fitTargetDatabaseHelper.insertUser(db,name,email,password,Integer.parseInt(age),Integer.parseInt(weight),
+                            Integer.parseInt(height),gender, measurement, weight_control_choice,Integer.parseInt(weight_target),
+                            Integer.parseInt(weight_period)
+                            );
+                    db.close();
                     Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
                     startActivity(intent);
                 }
