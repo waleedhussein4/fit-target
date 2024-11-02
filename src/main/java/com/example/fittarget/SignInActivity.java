@@ -88,6 +88,7 @@ public class SignInActivity extends AppCompatActivity {
                     }
                     if(isValid){
                         Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
+                        intent.putExtra("userEmail",email);
                         startActivity(intent);
                     }
                 });
