@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitTarget"
         tools:targetApi="31">
+        
+        <!-- All activities from both branches are merged here -->
         <activity
             android:name=".BmiActivity"
             android:exported="false" />
@@ -25,14 +27,20 @@
             android:name=".SignInActivity"
             android:exported="false" />
         <activity
+            android:name=".SummaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewAnalyticsActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
 
 </manifest>
+
