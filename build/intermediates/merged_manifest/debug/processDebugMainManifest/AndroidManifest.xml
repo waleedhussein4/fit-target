@@ -33,21 +33,8 @@
         android:testOnly="true"
         android:theme="@style/Theme.FitTarget" >
         <activity
-            android:name="com.example.fittarget.SummaryActivity"
+            android:name="com.example.fittarget.BmiActivity"
             android:exported="false" />
-        <!-- Set ViewAnalyticsActivity as the temporary launch activity -->
-        <activity
-            android:name="com.example.fittarget.ViewAnalyticsActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> <!-- Remove the intent-filter from MainActivity temporarily -->
-        <activity
-            android:name="com.example.fittarget.MainActivity"
-            android:exported="true" />
         <activity
             android:name="com.example.fittarget.HomePageActivity"
             android:exported="false" />
@@ -57,6 +44,21 @@
         <activity
             android:name="com.example.fittarget.SignInActivity"
             android:exported="false" />
+        <activity
+            android:name="com.example.fittarget.SummaryActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.fittarget.ViewAnalyticsActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.example.fittarget.MainActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name="com.google.firebase.components.ComponentDiscoveryService"
