@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Fit Target</string>
+
     <string name="button_finishWorkout">Finish</string>
     <string name="volume">Volume</string>
     <string name="sets">Sets</string>
@@ -7,3 +8,15 @@
     <string name="addExercisePrompt">Get started by adding an exercise</string>
     <string name="addExercise">+ Add Exercise</string>
 </resources>
+
+
+    <!-- Muscle group options for the Spinner -->
+    <string-array name="muscle_groups">
+        <item>Legs</item>
+        <item>Arms</item>
+        <item>Shoulder</item>
+        <item>Back</item>
+        <item>Chest</item>
+    </string-array>
+</resources>
+

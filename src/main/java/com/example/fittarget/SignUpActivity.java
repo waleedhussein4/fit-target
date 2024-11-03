@@ -167,6 +167,7 @@ public class SignUpActivity extends AppCompatActivity {
                             );
                     db.close();
                     Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
+                    intent.putExtra("userEmail",email);
                     startActivity(intent);
                 }
             }
