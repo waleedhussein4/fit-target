@@ -2,33 +2,74 @@ package com.example.fittarget;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.example.fittarget.objects.Exercise;
+import com.example.fittarget.objects.Workout;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "fit_target_database";
-    private static int DB_VERSION = 2;
+    private static int DB_VERSION = 4;
+    private static final int CURRENT_WORKOUT_ID = 0;
+    private Context context;
 
-    FitTargetDatabaseHelper(Context context) {
+    public FitTargetDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         updateMyDatabase(db, 0, DB_VERSION);
+        db.execSQL("CREATE TABLE exercises (id INTEGER PRIMARY KEY, name TEXT, muscle text)");
+
+        // Load CSV data into the database
+        loadExercisesFromCSV(db);
     }
+
+    private void loadExercisesFromCSV(SQLiteDatabase db) {
+        AssetManager assetManager = context.getAssets();
+        try (InputStream is = assetManager.open("megaGymDataset.csv");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+
+            String line;
+            // Skip the first line (header)
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(","); // Adjust separator if needed
+                String exerciseName = columns[1];
+                int exerciseId = Integer.parseInt(columns[0]);
+                String muscle = columns[4];
+
+                // Insert into the database
+                db.execSQL("INSERT INTO exercises (name, id, muscle) VALUES (?, ?, ?)",
+                        new Object[]{exerciseName, exerciseId, muscle});
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         updateMyDatabase(db, oldVersion, newVersion);
     }
 
-    // Your existing methods
+    // User data methods remain unchanged
     public void insertUser(SQLiteDatabase db, String name, String email, String password, int age, int weight, int height, String gender, String weightMeasurementPreference, String weightControl, int weightTarget, int periodTarget) {
         ContentValues userValues = new ContentValues();
         userValues.put("NAME", name);
@@ -60,21 +101,13 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query("USER_INFO", new String[]{"EMAIL", "PASSWORD"}, null, null, null, null, null, "1");
 
         if (cursor != null && cursor.moveToFirst()) {
-            int emailIndex = cursor.getColumnIndex("EMAIL");
-            int passwordIndex = cursor.getColumnIndex("PASSWORD");
-
-            if (emailIndex != -1 && passwordIndex != -1) {
-                String email = cursor.getString(emailIndex);
-                String password = cursor.getString(passwordIndex);
-                cursor.close();
-                db.close();
-                return new String[]{email, password};
-            }
-        }
-
-        if (cursor != null) {
+            String email = cursor.getString(cursor.getColumnIndex("EMAIL"));
+            String password = cursor.getString(cursor.getColumnIndex("PASSWORD"));
             cursor.close();
+            db.close();
+            return new String[]{email, password};
         }
+        cursor.close();
         db.close();
         return null;
     }
@@ -89,7 +122,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return isValid;
     }
 
-    // New workout table structure
     public void updateMyDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 1) {
             db.execSQL("CREATE TABLE USER_INFO (" +
@@ -107,37 +139,37 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
                     "PERIOD_TARGET INTEGER)");
 
             db.execSQL("CREATE TABLE WORKOUT (" +
+                    "WORKOUT_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "SETS INTEGER," +
                     "VOLUME INTEGER," +
                     "START_DATE TEXT," +
                     "END_DATE TEXT)");
 
-            // Add WORKOUT_EXERCISE_ID as a unique identifier for each exercise instance in a workout
             db.execSQL("CREATE TABLE EXERCISE (" +
-                    "WORKOUT_EXERCISE_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "EXERCISE_NAME TEXT)");
+                    "EXERCISE_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "WORKOUT_ID INTEGER," +
+                    "EXERCISE_NAME TEXT," +
+                    "MUSCLE TEXT," +
+                    "FOREIGN KEY(WORKOUT_ID) REFERENCES WORKOUT(WORKOUT_ID))");
 
-            // Associate each set with a specific WORKOUT_EXERCISE_ID
-            db.execSQL("CREATE TABLE SETS (" +
+            db.execSQL("CREATE TABLE EXERCISE_SET (" +
                     "SET_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "WORKOUT_EXERCISE_ID INTEGER," +
+                    "EXERCISE_ID INTEGER," +
                     "WEIGHT INTEGER," +
                     "REPS INTEGER," +
-                    "FOREIGN KEY(WORKOUT_EXERCISE_ID) REFERENCES EXERCISE(WORKOUT_EXERCISE_ID))");
-        } else if (oldVersion == 1 && newVersion >= 2) {
-            db.execSQL("ALTER TABLE WORKOUT ADD COLUMN END_DATE TEXT");
+                    "SET_INDEX INTEGER," +
+                    "FOREIGN KEY(EXERCISE_ID) REFERENCES EXERCISE(EXERCISE_ID))");
+
         }
     }
 
-
-    // Insert a single workout (overwriting any existing workout data)
-    public void insertWorkout(Workout workout) {
+    public void insertCurrentWorkout(Workout workout) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("WORKOUT", null, null);
-        db.delete("EXERCISE", null, null);
-        db.delete("SETS", null, null);
+        db.delete("WORKOUT", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+        db.delete("EXERCISE", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
 
         ContentValues workoutValues = new ContentValues();
+        workoutValues.put("WORKOUT_ID", CURRENT_WORKOUT_ID);
         workoutValues.put("SETS", workout.getSets());
         workoutValues.put("VOLUME", workout.getVolume());
         workoutValues.put("START_DATE", String.valueOf(workout.getStartDate().getTime()));
@@ -146,132 +178,151 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
         for (Exercise exercise : workout.getExercises()) {
             ContentValues exerciseValues = new ContentValues();
+            exerciseValues.put("WORKOUT_ID", CURRENT_WORKOUT_ID);
             exerciseValues.put("EXERCISE_NAME", exercise.getName());
-            long workoutExerciseId = db.insert("EXERCISE", null, exerciseValues);
+            exerciseValues.put("MUSCLE", exercise.getMuscle());
+            long exerciseId = db.insert("EXERCISE", null, exerciseValues);
 
             for (Exercise.Set set : exercise.getSets()) {
                 ContentValues setValues = new ContentValues();
-                setValues.put("WORKOUT_EXERCISE_ID", workoutExerciseId); // Associate with this specific exercise instance
+                setValues.put("EXERCISE_ID", exerciseId);
                 setValues.put("WEIGHT", set.getWeight());
                 setValues.put("REPS", set.getReps());
-                db.insert("SETS", null, setValues);
+                setValues.put("SET_INDEX", set.getIndexInEx());
+                db.insert("EXERCISE_SET", null, setValues);
             }
         }
-
         db.close();
     }
 
-
-    // Retrieve the current workout from the database
     public Workout getUserCurrentWorkout() {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Query the WORKOUT table for workout details
-        Cursor workoutCursor = db.query("WORKOUT", new String[]{"SETS", "VOLUME", "START_DATE", "END_DATE"},
-                null, null, null, null, null);
+        Cursor workoutCursor = db.query("WORKOUT", new String[]{"SETS", "VOLUME", "START_DATE", "END_DATE"}, "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)}, null, null, null);
 
         Workout workout = null;
-        if (workoutCursor != null && workoutCursor.moveToFirst()) {
-            int setsIndex = workoutCursor.getColumnIndex("SETS");
-            int volumeIndex = workoutCursor.getColumnIndex("VOLUME");
-            int startDateIndex = workoutCursor.getColumnIndex("START_DATE");
-            int endDateIndex = workoutCursor.getColumnIndex("END_DATE");
+        if (workoutCursor.moveToFirst()) {
+            int sets = workoutCursor.getInt(workoutCursor.getColumnIndex("SETS"));
+            int volume = workoutCursor.getInt(workoutCursor.getColumnIndex("VOLUME"));
+            String startDateStr = workoutCursor.getString(workoutCursor.getColumnIndex("START_DATE"));
+            String endDateStr = workoutCursor.getString(workoutCursor.getColumnIndex("END_DATE"));
 
-            // Check if column indices are valid
-            if (setsIndex != -1 && volumeIndex != -1 && startDateIndex != -1 && endDateIndex != -1) {
-                int sets = workoutCursor.getInt(setsIndex);
-                int volume = workoutCursor.getInt(volumeIndex);
-                String startDateStr = workoutCursor.getString(startDateIndex);
-                String endDateStr = workoutCursor.getString(endDateIndex);
+            workout = new Workout();
+            workout.setSets(sets);
+            workout.setVolume(volume);
+            workout.setStartDate(new Date(Long.parseLong(startDateStr)));
+            if (endDateStr != null) workout.setEndDate(new Date(Long.parseLong(endDateStr)));
 
-                workout = new Workout();
-                workout.setSets(sets);
-                workout.setVolume(volume);
+            Cursor exerciseCursor = db.query("EXERCISE", new String[]{"EXERCISE_ID", "EXERCISE_NAME"}, "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)}, null, null, null);
+            List<Exercise> exercises = new ArrayList<>();
 
-                // Parse start date from the database
-                if (startDateStr != null) {
-                    workout.setStartDate(new Date(Long.parseLong(startDateStr)));
+            while (exerciseCursor.moveToNext()) {
+                String exerciseName = exerciseCursor.getString(exerciseCursor.getColumnIndex("EXERCISE_NAME"));
+                int exerciseId = exerciseCursor.getInt(exerciseCursor.getColumnIndex("EXERCISE_ID"));
+                String exerciseMuscle = exerciseCursor.getString(exerciseCursor.getColumnIndex("MUSCLE"));
+                Exercise exercise = new Exercise(exerciseName, exerciseId, exerciseMuscle);
+
+                Cursor setCursor = db.query("EXERCISE_SET", new String[]{"WEIGHT", "REPS"}, "EXERCISE_ID = ?", new String[]{String.valueOf(exerciseId)}, null, null, null);
+                List<Exercise.Set> setsList = new ArrayList<>();
+                int setIndexInExercise = 0;
+                while (setCursor.moveToNext()) {
+                    int weight = setCursor.getInt(setCursor.getColumnIndex("WEIGHT"));
+                    int reps = setCursor.getInt(setCursor.getColumnIndex("REPS"));
+                    setsList.add(new Exercise.Set(weight, reps, setIndexInExercise));
+                    setIndexInExercise++;
                 }
-
-                // Parse end date if it exists (null means the workout is still ongoing)
-                if (endDateStr != null && !endDateStr.isEmpty()) {
-                    workout.setEndDate(new Date(Long.parseLong(endDateStr)));
-                }
-
-                // Retrieve exercises and their sets
-                Cursor exerciseCursor = db.query("EXERCISE", new String[]{"EXERCISE_NAME"}, null, null, null, null, null);
-                List<Exercise> exercises = new ArrayList<>();
-
-                if (exerciseCursor != null && exerciseCursor.moveToFirst()) {
-                    do {
-                        int exerciseNameIndex = exerciseCursor.getColumnIndex("EXERCISE_NAME");
-
-                        if (exerciseNameIndex != -1) {
-                            String exerciseName = exerciseCursor.getString(exerciseNameIndex);
-                            Exercise exercise = new Exercise(exerciseName);
-
-                            // Retrieve sets for each exercise
-                            Cursor setCursor = db.query("SETS", new String[]{"WEIGHT", "REPS"},
-                                    "EXERCISE_NAME = ?", new String[]{exerciseName}, null, null, null);
-
-                            List<Exercise.Set> setsList = new ArrayList<>();
-                            if (setCursor != null && setCursor.moveToFirst()) {
-                                int weightIndex = setCursor.getColumnIndex("WEIGHT");
-                                int repsIndex = setCursor.getColumnIndex("REPS");
-
-                                do {
-                                    if (weightIndex != -1 && repsIndex != -1) {
-                                        int weight = setCursor.getInt(weightIndex);
-                                        int reps = setCursor.getInt(repsIndex);
-                                        setsList.add(new Exercise.Set(weight, reps));
-                                    }
-                                } while (setCursor.moveToNext());
-                                setCursor.close();
-                            }
-                            exercise.setSets(setsList);
-                            exercises.add(exercise);
-                        }
-                    } while (exerciseCursor.moveToNext());
-                    exerciseCursor.close();
-                }
-
-                workout.setExercises(exercises);
+                setCursor.close();
+                exercise.setSets(setsList);
+                exercises.add(exercise);
             }
-            workoutCursor.close();
+            exerciseCursor.close();
+            workout.setExercises(exercises);
         }
-
+        workoutCursor.close();
         db.close();
         return workout;
     }
 
     public void deleteCurrentWorkout() {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        // Ensure full deletion of workout data across all tables
-        db.delete("WORKOUT", null, null);
-        db.delete("EXERCISE", null, null);
-        db.delete("SETS", null, null);
-
-        // Double-check if data still exists, and re-delete if necessary
-        Cursor workoutCursor = db.query("WORKOUT", null, null, null, null, null, null);
-        Cursor exerciseCursor = db.query("EXERCISE", null, null, null, null, null, null);
-        Cursor setsCursor = db.query("SETS", null, null, null, null, null, null);
-
-        // If any data remains in the tables, delete again
-        if (workoutCursor.getCount() > 0) {
-            db.delete("WORKOUT", null, null);
-        }
-        if (exerciseCursor.getCount() > 0) {
-            db.delete("EXERCISE", null, null);
-        }
-        if (setsCursor.getCount() > 0) {
-            db.delete("SETS", null, null);
-        }
-
-        // Close cursors and database
-        workoutCursor.close();
-        exerciseCursor.close();
-        setsCursor.close();
+        db.delete("EXERCISE_SET", "EXERCISE_ID IN (SELECT EXERCISE_ID FROM EXERCISE WHERE WORKOUT_ID = ?)", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+        db.delete("EXERCISE", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+        db.delete("WORKOUT", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
         db.close();
     }
+
+    public void insertCompletedWorkout(Workout workout) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues workoutValues = new ContentValues();
+        workoutValues.put("SETS", workout.getSets());
+        workoutValues.put("VOLUME", workout.getVolume());
+        workoutValues.put("START_DATE", String.valueOf(workout.getStartDate().getTime()));
+        workoutValues.put("END_DATE", workout.getEndDate() != null ? String.valueOf(workout.getEndDate().getTime()) : null);
+        long workoutId = db.insert("WORKOUT", null, workoutValues);
+
+        for (Exercise exercise : workout.getExercises()) {
+            ContentValues exerciseValues = new ContentValues();
+            exerciseValues.put("WORKOUT_ID", workoutId);
+            exerciseValues.put("EXERCISE_NAME", exercise.getName());
+            exerciseValues.put("MUSCLE", exercise.getMuscle());
+            long exerciseId = db.insert("EXERCISE", null, exerciseValues);
+
+            for (Exercise.Set set : exercise.getSets()) {
+                ContentValues setValues = new ContentValues();
+                setValues.put("EXERCISE_ID", exerciseId);
+                setValues.put("WEIGHT", set.getWeight());
+                setValues.put("REPS", set.getReps());
+                setValues.put("SET_INDEX", set.getIndexInEx());
+                db.insert("EXERCISE_SET", null, setValues);
+            }
+        }
+        db.close();
+    }
+
+    public Exercise.Set getPreviousSet(int exerciseId, int setIndex) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Log.d("EXERCISE ID", String.valueOf(exerciseId));
+        Log.d("SET INDEX", String.valueOf(setIndex));
+
+        // Query to get the latest completed set data for the given exercise ID and set index
+        Cursor cursor = db.rawQuery(
+                "SELECT es.WEIGHT, es.REPS " +
+                        "FROM EXERCISE_SET es " +
+                        "JOIN EXERCISE e ON es.EXERCISE_ID = e.EXERCISE_ID " +
+                        "JOIN WORKOUT w ON e.WORKOUT_ID = w.WORKOUT_ID " +
+                        "WHERE e.EXERCISE_ID = ? AND es.SET_INDEX = ? AND w.WORKOUT_ID != 0 " +
+                        "ORDER BY w.END_DATE DESC LIMIT 1",
+                new String[]{String.valueOf(exerciseId), String.valueOf(setIndex)}
+        );
+
+        Exercise.Set previousSet = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            int weight = cursor.getInt(cursor.getColumnIndex("WEIGHT"));
+            int reps = cursor.getInt(cursor.getColumnIndex("REPS"));
+            previousSet = new Exercise.Set(weight, reps, setIndex);
+        }
+        if (cursor != null) cursor.close();
+        db.close();
+        return previousSet;
+    }
+
+    public List<Exercise> getAllExercises() {
+        List<Exercise> exercises = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM exercises", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Exercise exercise = new Exercise(
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("muscle"))
+                );
+                exercises.add(exercise);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return exercises;
+    }
+
 }
