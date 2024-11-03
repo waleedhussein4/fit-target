@@ -1,5 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.application) apply true
+    kotlin("android") version "1.8.0" apply true
 }
 
 android {
@@ -37,6 +38,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
+    implementation(libs.firebase.vertexai) // Ensure version format is correct
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
