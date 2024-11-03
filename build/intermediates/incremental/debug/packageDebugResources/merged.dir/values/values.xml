@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="muscle_groups">
+        <item>Legs</item>
+        <item>Arms</item>
+        <item>Shoulder</item>
+        <item>Back</item>
+        <item>Chest</item>
+    </string-array>
+    <color name="black">#FF000000</color>
+    <color name="dark">#1D1D1D</color>
+    <color name="gold">#C8A200</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">Fit Target</string>
+    <style name="Base.Theme.FitTarget" parent="Theme.AppCompat.Light.NoActionBar">
+        
+        
+    </style>
+    <style name="Theme.FitTarget" parent="Base.Theme.FitTarget"/>
+</resources>

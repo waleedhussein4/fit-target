@@ -956,7 +956,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\user\\Downloads\\fit-target-main\\fit-target-main\\src\\main\\res\\values-night\\themes.xml",
+                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-4\\4bfc01e581efcbe22e2a5e58966017cf\\transformed\\appcompat-1.7.0\\res\\values-night-v8\\values-night-v8.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,125,209,293,389,491,593,687",
+                        "endColumns": "69,83,83,95,101,101,93,88",
+                        "endOffsets": "120,204,288,384,486,588,682,771"
+                    },
+                    "to": {
+                        "startLines": "6,7,8,9,10,11,12,39",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "169,239,323,407,503,605,707,3689",
+                        "endColumns": "69,83,83,95,101,101,93,88",
+                        "endOffsets": "234,318,402,498,600,702,796,3773"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\user\\Desktop\\git\\fit-target-View_Analytics\\src\\main\\res\\values-night\\themes.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -972,23 +989,6 @@
                         "endLines": "5",
                         "endColumns": "12",
                         "endOffsets": "164"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-4\\4bfc01e581efcbe22e2a5e58966017cf\\transformed\\appcompat-1.7.0\\res\\values-night-v8\\values-night-v8.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,125,209,293,389,491,593,687",
-                        "endColumns": "69,83,83,95,101,101,93,88",
-                        "endOffsets": "120,204,288,384,486,588,682,771"
-                    },
-                    "to": {
-                        "startLines": "6,7,8,9,10,11,12,39",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "169,239,323,407,503,605,707,3689",
-                        "endColumns": "69,83,83,95,101,101,93,88",
-                        "endOffsets": "234,318,402,498,600,702,796,3773"
                     }
                 }
             ]
@@ -7649,6 +7649,44 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\user\\Desktop\\git\\fit-target-View_Analytics\\src\\main\\res\\values\\themes.xml",
+                    "from": {
+                        "startLines": "2,7",
+                        "startColumns": "4,4",
+                        "startOffsets": "100,321",
+                        "endLines": "5,7",
+                        "endColumns": "12,66",
+                        "endOffsets": "315,383"
+                    },
+                    "to": {
+                        "startLines": "2514,6433",
+                        "startColumns": "4,4",
+                        "startOffsets": "177173,450862",
+                        "endLines": "2517,6433",
+                        "endColumns": "12,65",
+                        "endOffsets": "177282,450923"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\user\\Desktop\\git\\fit-target-View_Analytics\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "4,1",
+                        "startColumns": "4,4",
+                        "startOffsets": "119,17",
+                        "endLines": "10,1",
+                        "endColumns": "19,47",
+                        "endOffsets": "315,60"
+                    },
+                    "to": {
+                        "startLines": "2,1997",
+                        "startColumns": "4,4",
+                        "startOffsets": "150,132055",
+                        "endLines": "8,1997",
+                        "endColumns": "19,47",
+                        "endOffsets": "340,132098"
+                    }
+                },
+                {
                     "source": "C:\\Users\\user\\.gradle\\caches\\transforms-4\\5306f9cfdefa9ee2e1b1081dec50775f\\transformed\\constraintlayout-2.1.4\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,9,10,15,16,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,42,43,44,45,55,63,64,65,70,71,76,81,82,83,88,89,94,95,100,101,102,108,109,110,115,121,122,123,124,130,131,132,133,136,139,142,143,146,149,150,151,152,153,156,159,160,161,162,168,173,176,179,180,181,186,187,188,191,194,195,198,201,204,207,208,209,212,215,216,221,222,228,233,236,239,240,241,242,243,244,245,246,247,248,249,250,266,272,273,274,275,276,283,289,290,291,294,299,300,308,309,310,311,312,313,314,315,324,325,326,332,333,339,343,344,345,346,347,356,360,361,380,566,694,700,704,874,1026,1039,1055,1080,1103,1106,1109,1112,1141,1168,1185,1271,1279,1292,1308,1312,1342,1355,1359,1369,1379,1423,1436,1440,1443,1459,1500,1535,1542,1559",
@@ -7684,25 +7722,6 @@
                         "endLines": "9414,9420,9430,13011,13015",
                         "endColumns": "24,24,24,24,24",
                         "endOffsets": "649635,649813,650097,781705,781832"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\user\\Downloads\\fit-target-main\\fit-target-main\\src\\main\\res\\values\\strings.xml",
-                    "from": {
-                        "startLines": "4,1",
-                        "startColumns": "4,4",
-                        "startOffsets": "115,16",
-                        "endLines": "10,1",
-                        "endColumns": "19,47",
-                        "endOffsets": "305,59"
-                    },
-                    "to": {
-                        "startLines": "2,1997",
-                        "startColumns": "4,4",
-                        "startOffsets": "150,132055",
-                        "endLines": "8,1997",
-                        "endColumns": "19,47",
-                        "endOffsets": "340,132098"
                     }
                 },
                 {
@@ -7780,6 +7799,23 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\user\\Desktop\\git\\fit-target-View_Analytics\\src\\main\\res\\values\\colors.xml",
+                    "from": {
+                        "startLines": "2,5,4,3",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,178,139,97",
+                        "endColumns": "41,38,38,41",
+                        "endOffsets": "92,212,173,134"
+                    },
+                    "to": {
+                        "startLines": "648,671,715,977",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "33054,34788,37796,57479",
+                        "endColumns": "41,38,38,41",
+                        "endOffsets": "33091,34822,37830,57516"
+                    }
+                },
+                {
                     "source": "C:\\Users\\user\\.gradle\\caches\\transforms-4\\80f9dbf4bd8ab2dd1f0d91ad6cbe9db0\\transformed\\play-services-basement-18.3.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "4,7",
@@ -7794,23 +7830,6 @@
                         "startOffsets": "125708,135270",
                         "endColumns": "67,166",
                         "endOffsets": "125771,135432"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\user\\Downloads\\fit-target-main\\fit-target-main\\src\\main\\res\\values\\colors.xml",
-                    "from": {
-                        "startLines": "2,5,4,3",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,178,139,97",
-                        "endColumns": "41,38,38,41",
-                        "endOffsets": "92,212,173,134"
-                    },
-                    "to": {
-                        "startLines": "648,671,715,977",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "33054,34788,37796,57479",
-                        "endColumns": "41,38,38,41",
-                        "endOffsets": "33091,34822,37830,57516"
                     }
                 },
                 {
@@ -7921,25 +7940,6 @@
                         "startOffsets": "125088",
                         "endColumns": "49",
                         "endOffsets": "125133"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\user\\Downloads\\fit-target-main\\fit-target-main\\src\\main\\res\\values\\themes.xml",
-                    "from": {
-                        "startLines": "2,7",
-                        "startColumns": "4,4",
-                        "startOffsets": "100,321",
-                        "endLines": "5,7",
-                        "endColumns": "12,66",
-                        "endOffsets": "315,383"
-                    },
-                    "to": {
-                        "startLines": "2514,6433",
-                        "startColumns": "4,4",
-                        "startOffsets": "177173,450862",
-                        "endLines": "2517,6433",
-                        "endColumns": "12,65",
-                        "endOffsets": "177282,450923"
                     }
                 },
                 {

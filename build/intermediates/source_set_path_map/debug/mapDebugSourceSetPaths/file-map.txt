@@ -28,10 +28,10 @@ com.example.fittarget-annotation-experimental-1.4.0-26 C:\Users\user\.gradle\cac
 com.example.fittarget-appcompat-resources-1.7.0-27 C:\Users\user\.gradle\caches\transforms-4\d59460a0fbf0a4145fb08fbba6b35c09\transformed\appcompat-resources-1.7.0\res
 com.example.fittarget-lifecycle-viewmodel-2.6.2-28 C:\Users\user\.gradle\caches\transforms-4\e516fe356c1c74f5bae80f43f4281d53\transformed\lifecycle-viewmodel-2.6.2\res
 com.example.fittarget-lifecycle-runtime-2.6.2-29 C:\Users\user\.gradle\caches\transforms-4\ea8b8958e0621bb3a72e7fb20d760232\transformed\lifecycle-runtime-2.6.2\res
-com.example.fittarget-pngs-30 C:\Users\user\Downloads\fit-target-main\fit-target-main\build\generated\res\pngs\debug
-com.example.fittarget-resValues-31 C:\Users\user\Downloads\fit-target-main\fit-target-main\build\generated\res\resValues\debug
-com.example.fittarget-packageDebugResources-32 C:\Users\user\Downloads\fit-target-main\fit-target-main\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.example.fittarget-packageDebugResources-33 C:\Users\user\Downloads\fit-target-main\fit-target-main\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.example.fittarget-debug-34 C:\Users\user\Downloads\fit-target-main\fit-target-main\build\intermediates\merged_res\debug\mergeDebugResources
-com.example.fittarget-debug-35 C:\Users\user\Downloads\fit-target-main\fit-target-main\src\debug\res
-com.example.fittarget-main-36 C:\Users\user\Downloads\fit-target-main\fit-target-main\src\main\res
+com.example.fittarget-pngs-30 C:\Users\user\Desktop\git\fit-target-View_Analytics\build\generated\res\pngs\debug
+com.example.fittarget-resValues-31 C:\Users\user\Desktop\git\fit-target-View_Analytics\build\generated\res\resValues\debug
+com.example.fittarget-packageDebugResources-32 C:\Users\user\Desktop\git\fit-target-View_Analytics\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.fittarget-packageDebugResources-33 C:\Users\user\Desktop\git\fit-target-View_Analytics\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.fittarget-debug-34 C:\Users\user\Desktop\git\fit-target-View_Analytics\build\intermediates\merged_res\debug\mergeDebugResources
+com.example.fittarget-debug-35 C:\Users\user\Desktop\git\fit-target-View_Analytics\src\debug\res
+com.example.fittarget-main-36 C:\Users\user\Desktop\git\fit-target-View_Analytics\src\main\res
