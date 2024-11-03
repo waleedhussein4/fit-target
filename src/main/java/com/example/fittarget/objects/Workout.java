@@ -1,4 +1,4 @@
-package com.example.fittarget;
+package com.example.fittarget.objects;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +30,7 @@ public class Workout {
 
     public List<Exercise> getExercises() { return exercises; }
     public void setExercises(List<Exercise> exercises) { this.exercises = exercises; }
+    public void addExercise(Exercise ex) { this.exercises.add(ex); }
 
     public Date getEndDate() { return endDate; }
     public void setEndDate(Date param_endDate) { this.endDate = param_endDate; }
