@@ -14,5 +14,12 @@
         android:layout_height="98dp"
         android:background="@drawable/rounded_button"
         android:text="BMI Calculator" />
+    <Button
+        android:id="@+id/ViewAnalyticsButton"
+        android:layout_width="197dp"
+        android:layout_height="98dp"
+        android:text="View Analytics"
+        android:background="@drawable/rounded_button"
+        />
 
 </LinearLayout>

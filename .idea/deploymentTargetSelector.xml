@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="Fit_Target">
+      <SelectionState runConfigName="FitTarget">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

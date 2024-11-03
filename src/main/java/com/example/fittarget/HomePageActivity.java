@@ -30,5 +30,10 @@ public class HomePageActivity extends AppCompatActivity {
             intent.putExtra("userEmail",email);
             startActivity(intent);
         });
+        Button viewAnalyticsBtn = findViewById(R.id.ViewAnalyticsButton);
+        viewAnalyticsBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(HomePageActivity.this, ViewAnalyticsActivity.class);
+            startActivity(intent);
+        });
     }
 }
