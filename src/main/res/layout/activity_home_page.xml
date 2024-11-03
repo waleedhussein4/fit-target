@@ -9,6 +9,18 @@
     tools:context=".HomePageActivity">
 
     <Button
+
+        android:id="@+id/button_startWorkout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start workout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
         android:id="@+id/BmiButton"
         android:layout_width="197dp"
         android:layout_height="98dp"
@@ -23,3 +35,4 @@
         />
 
 </LinearLayout>
+
