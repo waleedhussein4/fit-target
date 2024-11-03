@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.recyclerview)
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation(libs.firebase.vertexai) // Ensure version format is correct
     testImplementation(libs.junit)

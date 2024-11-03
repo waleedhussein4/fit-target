@@ -15,6 +15,10 @@
 
         <!-- All activities from both branches are merged here -->
         <activity
+            android:name=".SelectExerciseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogWorkoutActivity"
             android:name=".BmiActivity"
             android:exported="false" />
         <activity

@@ -1,9 +1,9 @@
 package com.example.fittarget;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,8 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.fittarget.adapters.ExerciseAdapter;
+import com.example.fittarget.objects.Exercise;
+import com.example.fittarget.objects.Workout;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -24,6 +31,9 @@ public class LogWorkoutActivity extends AppCompatActivity {
     private TextView durationTextView;
     private long startTimeMillis;
     private Workout currentWorkout;
+    private RecyclerView exerciseRecyclerView;
+    private ExerciseAdapter exerciseAdapter;
+    private static final int REQUEST_SELECT_EXERCISE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +57,13 @@ public class LogWorkoutActivity extends AppCompatActivity {
         button_addExercise.setOnClickListener(view -> addExercise());
         button_finish.setOnClickListener(view -> finishWorkout());
 
-        // Load current workout and start duration counter if exists
+        exerciseRecyclerView = findViewById(R.id.exerciseList);
+
         Workout importedWorkout = DB.getUserCurrentWorkout();
         if (importedWorkout != null) {
             startTimeMillis = importedWorkout.getStartDate().getTime();
             currentWorkout = importedWorkout;
 
-            // Hide the placeholder prompt if workout exists
             TextView placeholder = findViewById(R.id.placeholderPrompt);
             placeholder.setVisibility(TextView.INVISIBLE);
         } else {
@@ -61,7 +71,39 @@ public class LogWorkoutActivity extends AppCompatActivity {
             currentWorkout = new Workout();
         }
         startDurationCounter();
-        displayWorkout(currentWorkout);
+        displayWorkout();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop the timer when activity is destroyed
+        if (timerHandler != null) {
+            timerHandler.removeCallbacks(timerRunnable);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        DB.insertCurrentWorkout(currentWorkout); // Ensure ongoing workout is saved
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SELECT_EXERCISE && resultCode == RESULT_OK) {
+            String selectedExerciseName = data.getStringExtra("selectedExerciseName");
+            int selectedExerciseId = data.getIntExtra("selectedExerciseId", 0);
+            String selectedExerciseMuscle = data.getStringExtra("selectedExerciseMuscle");
+            Exercise selectedExercise = new Exercise(selectedExerciseName, selectedExerciseId, selectedExerciseMuscle);
+
+            // Add directly to currentWorkout's exercise list
+            currentWorkout.getExercises().add(selectedExercise);
+
+            // Notify adapter to refresh the view
+            exerciseAdapter.notifyDataSetChanged();
+        }
     }
 
     private void startDurationCounter() {
@@ -90,40 +132,33 @@ public class LogWorkoutActivity extends AppCompatActivity {
         timerHandler.post(timerRunnable);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Stop the timer when activity is destroyed
-        if (timerHandler != null) {
-            timerHandler.removeCallbacks(timerRunnable);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        DB.insertWorkout(currentWorkout);
-    }
-
-    private void displayWorkout(Workout workout) {
-        // Implement workout display logic here if needed
+    private void displayWorkout() {
+        // Initialize the adapter with currentWorkout's exercise list
+        exerciseAdapter = new ExerciseAdapter(this, currentWorkout);
+        exerciseRecyclerView.setAdapter(exerciseAdapter);
+        exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void addExercise() {
-        // Implement add exercise logic here if needed
+        Intent intent = new Intent(this, SelectExerciseActivity.class);
+        startActivityForResult(intent, REQUEST_SELECT_EXERCISE);
     }
 
     private void finishWorkout() {
-        // todo confirmation prompt
-        // discard or save
-
-        currentWorkout.setEndDate(new Date());
-        // todo save workout to database
-
-        DB.deleteCurrentWorkout();
-
-        // todo go to homepage
-        startActivity(new Intent(LogWorkoutActivity.this, HomePageActivity.class));
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle("Finish Workout")
+                .setMessage("Do you want to save or discard this workout?")
+                .setPositiveButton("Save", (dialog, which) -> {
+                    currentWorkout.setEndDate(new Date());
+                    DB.insertCompletedWorkout(currentWorkout);  // Move to completed workouts
+                    DB.deleteCurrentWorkout();  // Clear current workout
+                    finish(); // Close the activity
+                })
+                .setNegativeButton("Discard", (dialog, which) -> {
+                    DB.deleteCurrentWorkout();  // Just delete the current workout
+                    finish(); // Close the activity
+                })
+                .setCancelable(true)
+                .show();
     }
 }
