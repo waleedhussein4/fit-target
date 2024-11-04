@@ -44,13 +44,13 @@ Cursor cursor;
             float targetWeight = cursor.getFloat(cursor.getColumnIndexOrThrow("WEIGHT_TARGET"));
 
             ageEditText.setText(String.valueOf(age));
-            ageEditText.setTextColor(getResources().getColor(R.color.white));
+            ageEditText.setTextColor(getResources().getColor(R.color.black));
             heightEditText.setText(String.format("%.1f", height));
-            heightEditText.setTextColor(getResources().getColor(R.color.white));
+            heightEditText.setTextColor(getResources().getColor(R.color.black));
             weightEditText.setText(String.format("%.1f", weight));
-            weightEditText.setTextColor(getResources().getColor(R.color.white));
+            weightEditText.setTextColor(getResources().getColor(R.color.black));
             goalWeightEditText.setText(String.format("%.1f", targetWeight));
-            goalWeightEditText.setTextColor(getResources().getColor(R.color.white));
+            goalWeightEditText.setTextColor(getResources().getColor(R.color.black));
             cursor.close();
             db.close();
         }
@@ -60,14 +60,14 @@ Cursor cursor;
         decrementHeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                height[0] = Math.max(0, height[0] - 1.0f); // Decrement by 1 cm, minimum is 0
+                height[0] = Math.max(0, height[0] -0.5f);
                 heightEditText.setText(String.format("%.1f", height[0]));
             }
         });
         incrementHeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                height[0] = Math.min(250, height[0] + 1.0f); // Increment
+                height[0] = Math.min(250, height[0] + 0.5f);
                 heightEditText.setText(String.format("%.1f", height[0]));
             }
         });
@@ -79,14 +79,14 @@ Cursor cursor;
         decrementWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                weightValue[0] = Math.max(0, weightValue[0] - 1.0f); // Decrement by 1 cm, minimum is 0
+                weightValue[0] = Math.max(0, weightValue[0] - 0.5f);
                 weightEditText.setText(String.format("%.1f", weightValue[0]));
             }
         });
         incrementWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                weightValue[0] = Math.min(250, weightValue[0] + 1.0f); // Increment
+                weightValue[0] = Math.min(250, weightValue[0] + 0.5f);
                 weightEditText.setText(String.format("%.1f", weightValue[0]));
             }
         });

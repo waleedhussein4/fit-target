@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             if (attemptAutoSignIn(email, password)) {
                 // Navigate to HomePageActivity if sign-in is successful
                 Intent intent = new Intent(this, HomePageActivity.class);
+                intent.putExtra("userEmail",email);
                 startActivity(intent);
                 finish();
                 return;  // Exit onCreate to avoid showing the sign-in/sign-up buttons

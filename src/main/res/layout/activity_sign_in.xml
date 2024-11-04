@@ -8,17 +8,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/dark"
+    android:background="@drawable/back"
     tools:context=".SignInActivity">
 
     <ImageView
-        android:id="@+id/smallLogo"
+        android:id="@+id/small2"
         android:layout_width="wrap_content"
         android:layout_height="340dp"
         android:layout_gravity="center"
-        android:src="@drawable/small"
+        android:src="@drawable/small2"
         android:contentDescription="Logo" />
-
 
     <TextView
         android:id="@+id/journeyText"

@@ -6,4 +6,6 @@
     <color name="dark">#1D1D1D</color>
     <color name="blue">#4052d6</color>
     <color name="gray">#D3D3D3</color>
+    <color name="light_gray">#D3D3D3</color>
+
 </resources>

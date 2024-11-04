@@ -3,6 +3,7 @@ package com.example.fittarget;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import android.widget.Button;
@@ -32,7 +33,7 @@ public class HomePageActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+       
 
         Workout importedWorkout = DB.getUserCurrentWorkout();
         if (importedWorkout != null) {
@@ -59,6 +60,7 @@ public class HomePageActivity extends AppCompatActivity {
             Intent intent = new Intent(HomePageActivity.this, ViewAnalyticsActivity.class);
             startActivity(intent);
         });
+
     }
 }
 
