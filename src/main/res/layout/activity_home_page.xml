@@ -1,38 +1,358 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".HomePageActivity">
 
-    <Button
+    android:padding="16dp">
 
-        android:id="@+id/button_startWorkout"
-        android:layout_width="wrap_content"
+    <!-- Sign Out Button at the Top Right -->
+
+
+    <!-- Small Icon Above Greeting Section -->
+    <ImageView
+        android:id="@+id/smallIcon"
+        android:layout_width="118dp"
+        android:layout_height="89dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/gray"
+        android:clickable="true"
+        android:src="@drawable/topleft" />
+
+    <!-- Greeting Section (Hello, Benjamin) -->
+
+    <!-- Weekly Stats Section Centered -->
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="253dp"
         android:layout_height="wrap_content"
-        android:text="Start workout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_below="@id/smallIcon"
+        android:layout_marginTop="-108dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/helloText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0sp"
+            android:fontFamily="sans-serif-light"
+            android:text=" Hello,"
+            android:textColor="#B3B3B3"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/usernameText"
+            android:layout_width="match_parent"
+            android:layout_height="89dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Benjamin"
+
+            android:textColor="#000000"
+            android:textSize="55sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="463dp"
+        android:layout_height="628dp"
+        android:layout_below="@+id/linearLayout2"
 
 
-<Button
-        android:id="@+id/BmiButton"
-        android:layout_width="197dp"
-        android:layout_height="98dp"
-        android:background="@drawable/rounded_button"
-        android:text="BMI Calculator" />
-    <Button
-        android:id="@+id/ViewAnalyticsButton"
-        android:layout_width="197dp"
-        android:layout_height="98dp"
-        android:text="View Analytics"
-        android:background="@drawable/rounded_button"
-        />
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-</LinearLayout>
+        <!-- Weekly Stats Title -->
+
+        <!-- Weekly Stats Content -->
+
+        <TextView
+            android:id="@+id/weeklyStatsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="10dp"
+            android:text="Weekly Stats"
+            android:textColor="#3D3D3D"
+            android:textSize="35sp"
+            android:textStyle="bold|italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <!-- Calories Burnt -->
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="141dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_blue"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="58dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_fire" /> <!-- Replace with flame icon -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="2,154"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kcal burnt"
+                    android:textColor="#A5A5A5"
+                    android:textSize="25sp" />
+            </LinearLayout>
+
+            <!-- Total Time -->
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="156dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_green"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="71dp"
+                    android:layout_height="58dp"
+                    android:src="@drawable/ic_clock" /> <!-- Replace with clock icon -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="16h"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="total time"
+                    android:textColor="#A5A5A5"
+                    android:textSize="25sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- Exercises Count and Most Active Day Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <!-- Exercises Count -->
+
+            <!-- Most Active Day -->
+            <LinearLayout
+                android:layout_width="2dp"
+                android:layout_height="143dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_grey"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="98dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_exercice" /> <!-- Replace with exercise icon -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="126"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="exercises"
+                    android:textColor="#A5A5A5"
+                    android:textSize="25sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="146dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_grey"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/mostActiveDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Most active"
+                    android:textColor="#A5A5A5"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/activeDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Thursday"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Weight: "
+                android:textColor="@color/black"
+                android:textSize="25sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="90 kg"
+                android:textColor="@color/black"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Target Weight: "
+                android:textColor="@color/black"
+                android:textSize="25sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="80 kg"
+                android:textColor="@color/black"
+                android:textSize="25sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#E0F7FA"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom">
+
+        <!-- Home Button -->
+        <TextView
+            android:id="@+id/homeText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Home"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
+
+        <!-- Add Workout Button -->
+        <TextView
+            android:id="@+id/button_startWorkout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add Workout"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:padding="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <!-- Analytics Button -->
+        <TextView
+            android:id="@+id/ViewAnalyticsButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Analytics"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <!-- BMI Button -->
+        <TextView
+            android:id="@+id/BmiButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="BMI"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+    </LinearLayout>
+</RelativeLayout>
+
+
+
+
 

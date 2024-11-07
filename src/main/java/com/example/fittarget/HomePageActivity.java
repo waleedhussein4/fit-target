@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import androidx.activity.EdgeToEdge;
@@ -40,7 +42,7 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(new Intent(this, LogWorkoutActivity.class));
         }
 
-        Button startWorkoutButton = findViewById(R.id.button_startWorkout);
+        TextView startWorkoutButton = findViewById(R.id.button_startWorkout);
 
         // Set up the OnClickListener to navigate to LogWorkoutActivity
         startWorkoutButton.setOnClickListener(v -> {
@@ -49,18 +51,27 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
         String email = getIntent().getStringExtra("userEmail");
-        Button bmiBtn = findViewById(R.id.BmiButton);
+        TextView bmiBtn = findViewById(R.id.BmiButton);
         bmiBtn.setOnClickListener(view -> {
             Intent intent = new Intent(HomePageActivity.this, BmiActivity.class);
             intent.putExtra("userEmail", email);
             startActivity(intent);
         });
-        Button viewAnalyticsBtn = findViewById(R.id.ViewAnalyticsButton);
+        TextView viewAnalyticsBtn = findViewById(R.id.ViewAnalyticsButton);
         viewAnalyticsBtn.setOnClickListener(view -> {
             Intent intent = new Intent(HomePageActivity.this, ViewAnalyticsActivity.class);
             startActivity(intent);
         });
 
+        ImageView profile = findViewById(R.id.smallIcon);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePageActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
     }
 }
 
