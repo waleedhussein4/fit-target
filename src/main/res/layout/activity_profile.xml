@@ -24,7 +24,7 @@
 
         <ImageView
             android:id="@+id/editProfileIcon"
-            android:layout_width="280dp"
+             android:layout_width="280dp"
             android:layout_height="45dp"
             android:contentDescription="Edit Profile"
             android:padding="4dp"
