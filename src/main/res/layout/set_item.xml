@@ -1,63 +1,47 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
-    <!-- Set Number -->
     <TextView
         android:id="@+id/set_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.22"
         android:text="Set #"
         android:textAlignment="center"
-        android:textStyle="bold"
-        android:paddingEnd="8dp"/>
+        android:textStyle="bold" />
 
-    <!-- Previous Weight and Reps -->
     <TextView
         android:id="@+id/previous_weight_reps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Previous"
+        android:layout_weight="0.22"
         android:textAlignment="center"
-        android:textColor="?android:attr/textColorSecondary"
-        android:paddingEnd="8dp"/>
+        android:textColor="?android:attr/textColorSecondary" />
 
-    <!-- Current Weight Input -->
     <EditText
         android:id="@+id/current_weight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Weight"
+        android:layout_weight="0.22"
         android:inputType="numberDecimal"
-        android:textAlignment="center"
-        android:paddingEnd="8dp"/>
+        android:textAlignment="center" />
 
-    <!-- Current Reps Input -->
     <EditText
         android:id="@+id/current_reps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Reps"
+        android:layout_weight="0.22"
         android:inputType="number"
-        android:textAlignment="center"
-        android:paddingEnd="8dp"/>
+        android:textAlignment="center" />
 
-    <!-- Discard Button -->
     <Button
         android:id="@+id/discard_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="X"
+        android:layout_weight="0.12"
         android:background="?android:attr/selectableItemBackground"
-        android:layout_marginStart="8dp"
-        android:padding="8dp"/>
+        android:text="X" />
 </LinearLayout>
-

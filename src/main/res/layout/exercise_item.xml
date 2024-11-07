@@ -1,18 +1,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:gravity="top"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@drawable/border">
+    android:padding="8dp">
 
-    <!-- Exercise name -->
     <TextView
         android:id="@+id/exercise_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Exercise Name"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingBottom="12dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/set_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.22"
+            android:text="Set"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.22"
+            android:text="Previous"
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.22"
+            android:text="Weight"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.22"
+            android:text="Reps"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.12"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- RecyclerView to show sets within each exercise -->
     <androidx.recyclerview.widget.RecyclerView
@@ -20,12 +69,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!-- Button bar -->
     <LinearLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/add_set_button"
@@ -43,7 +93,4 @@
             android:gravity="center"
             android:text="Discard Exercise" />
     </LinearLayout>
-
-    <!-- Button to add new sets -->
-
 </LinearLayout>
