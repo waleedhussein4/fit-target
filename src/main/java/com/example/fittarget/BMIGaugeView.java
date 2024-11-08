@@ -43,7 +43,6 @@ public class BMIGaugeView extends View {
         return paint;
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -51,7 +50,6 @@ public class BMIGaugeView extends View {
         int height = getMeasuredHeight();
 
         int radius = Math.min(width, height) / 2 - 50;
-
         int startAngle = 180;
 
         drawArcSegment(canvas, startAngle, 45, underweightPaint);
@@ -59,22 +57,18 @@ public class BMIGaugeView extends View {
         drawArcSegment(canvas, startAngle + 90, 45, overweightPaint);
         drawArcSegment(canvas, startAngle + 135, 45, obesePaint);
 
-        drawBMIValue(canvas, width / 2, height / 2 + 150); // Adjusted position
+        drawBMIValue(canvas, width / 2, height / 2 + 150);
+        drawBMIIndicator(canvas, width / 2, height / 2 + 100, radius);
 
-
-        float angle = calculateIndicatorAngle(bmiValue);
-        drawIndicator(canvas, width / 2, height / 2 + 100, radius, angle ); // Indicator line from BMI value
+        // Draw the range labels to the left of the BMI value
+        drawBMIRanges(canvas, width / 2 -450, height / 2 +250); // Adjust position as needed
         drawLabels(canvas, width / 2, height / 2, radius);
     }
 
-
-
     private void drawBMIValue(Canvas canvas, float x, float y) {
-
         Paint backgroundPaint = new Paint();
         backgroundPaint.setColor(Color.parseColor("#FFFFE0")); // Light yellow color
         backgroundPaint.setStyle(Paint.Style.FILL);
-
 
         Paint bmiTextPaint = new Paint();
         bmiTextPaint.setColor(Color.BLACK);
@@ -82,19 +76,15 @@ public class BMIGaugeView extends View {
         bmiTextPaint.setTextAlign(Paint.Align.CENTER);
         bmiTextPaint.setFakeBoldText(true); // Set text to bold
 
-
         float padding = 10; // Padding around the text
         float textWidth = bmiTextPaint.measureText("BMI: " + String.format("%.1f", bmiValue));
         float textHeight = bmiTextPaint.getTextSize();
 
-
         canvas.drawRect(x - textWidth / 2 - padding, y - textHeight, x + textWidth / 2 + padding, y + padding, backgroundPaint);
-
 
         String bmiText = "BMI: " + String.format("%.1f", bmiValue);
         canvas.drawText(bmiText, x, y, bmiTextPaint);
     }
-
 
     private void drawArcSegment(Canvas canvas, int startAngle, int sweepAngle, Paint paint) {
         int width = getWidth();
@@ -106,30 +96,31 @@ public class BMIGaugeView extends View {
 
     private float calculateIndicatorAngle(float bmi) {
         if (bmi < 18.5) {
-            return 202.5f;
+            return 202.5f; // Angle for Underweight
         } else if (bmi < 25) {
-            return 247.5f; // Angle for normal
+            return 247.5f; // Angle for Normal
         } else if (bmi < 30) {
-            return 292.5f; // Angle for overweight
+            return 292.5f; // Angle for Overweight
         } else {
-            return 337.5f; // Angle for obese
+            return 337.5f; // Angle for Obese
         }
     }
 
-
-
+    private void drawBMIIndicator(Canvas canvas, int cx, int cy, int radius) {
+        float angle = calculateIndicatorAngle(bmiValue);
+        drawIndicator(canvas, cx, cy, radius, angle);
+    }
 
     private void drawIndicator(Canvas canvas, int cx, int cy, int radius, float angle) {
         Paint indicatorPaint = new Paint();
         indicatorPaint.setStrokeWidth(8);
         indicatorPaint.setStyle(Paint.Style.STROKE);
 
-
         if (bmiValue < 18.5) {
             indicatorPaint.setColor(Color.parseColor("#FFEA00")); // Underweight color
-        } else if (bmiValue < 25 ) {
+        } else if (bmiValue < 25) {
             indicatorPaint.setColor(Color.parseColor("#FFBF00")); // Normal color
-        } else if (bmiValue <30 ) {
+        } else if (bmiValue < 30) {
             indicatorPaint.setColor(Color.parseColor("#CD7F32")); // Overweight color
         } else {
             indicatorPaint.setColor(Color.parseColor("#5D3A00")); // Obese color
@@ -143,7 +134,6 @@ public class BMIGaugeView extends View {
         float yEnd = (float) (cy + radius * Math.sin(radians));
 
         canvas.drawLine(xStart, yStart, xEnd, yEnd, indicatorPaint);
-
         drawArrowhead(canvas, xEnd, yEnd, angle, indicatorPaint.getColor());
     }
 
@@ -170,13 +160,82 @@ public class BMIGaugeView extends View {
         canvas.drawPath(arrowPath, arrowPaint);
     }
 
-
     private void drawLabels(Canvas canvas, int cx, int cy, int radius) {
         drawAlignedText(canvas, "Underweight", cx, cy, radius, 202.5f);
         drawAlignedText(canvas, "Normal", cx, cy, radius, 247.5f);
         drawAlignedText(canvas, "Overweight", cx, cy, radius, 292.5f);
         drawAlignedText(canvas, "Obese", cx, cy, radius, 337.5f);
     }
+
+    private void drawBMIRanges(Canvas canvas, float x, float y) {
+        Paint rangeTextPaint = new Paint();
+        rangeTextPaint.setTextSize(50);
+        rangeTextPaint.setTextAlign(Paint.Align.LEFT);
+
+        float yOffset = 50;
+
+        // Draw Severe Underweight
+        if (bmiValue < 16.0) {
+            rangeTextPaint.setColor(Color.parseColor("#FFEA00"));
+
+            rangeTextPaint.setFakeBoldText(true);// Severe Underweight color
+        } else {
+            rangeTextPaint.setColor(Color.BLACK);
+        }
+        canvas.drawText("Severe Underweight: <16.0", x, y, rangeTextPaint);
+        y += yOffset;
+
+        // Draw Underweight
+        if (bmiValue >= 16.0 && bmiValue < 18.5) {
+            rangeTextPaint.setColor(Color.parseColor("#FFEA00"));
+            rangeTextPaint.setFakeBoldText(true);// Underweight color
+        } else {
+            rangeTextPaint.setColor(Color.BLACK);
+        }
+        canvas.drawText("Underweight: 16.0 - 18.5", x, y, rangeTextPaint);
+        y += yOffset;
+
+        // Draw Normal
+        if (bmiValue >= 18.5 && bmiValue < 25) {
+            rangeTextPaint.setColor(Color.parseColor("#FFBF00"));
+            rangeTextPaint.setFakeBoldText(true);// Normal color
+        } else {
+            rangeTextPaint.setColor(Color.BLACK);
+        }
+        canvas.drawText("Normal: 18.5 - 24.9", x, y, rangeTextPaint);
+        y += yOffset;
+
+        // Draw Overweight
+        if (bmiValue >= 25 && bmiValue < 30) {
+            rangeTextPaint.setColor(Color.parseColor("#CD7F32"));
+            rangeTextPaint.setFakeBoldText(true);// Overweight color
+        } else {
+            rangeTextPaint.setColor(Color.BLACK);
+        }
+        canvas.drawText("Overweight: 25.0 - 29.9", x, y, rangeTextPaint);
+        y += yOffset;
+
+        // Draw Obese
+        if (bmiValue >= 30 && bmiValue < 35) {
+            rangeTextPaint.setColor(Color.parseColor("#5D3A00"));
+            rangeTextPaint.setFakeBoldText(true);// Obese color
+        } else {
+            rangeTextPaint.setColor(Color.BLACK);
+        }
+        canvas.drawText("Obese: 30.0 - 34.9", x, y, rangeTextPaint);
+        y += yOffset;
+
+        // Draw Severe Obese
+        if (bmiValue >= 35) {
+            rangeTextPaint.setColor(Color.parseColor("#5D3A00"));
+
+            rangeTextPaint.setFakeBoldText(true);// Severe Obese color
+        } else {
+            rangeTextPaint.setColor(Color.BLACK);
+        }
+        canvas.drawText("Severe Obese: ≥35.0", x, y, rangeTextPaint);
+    }
+
 
     private void drawAlignedText(Canvas canvas, String text, int cx, int cy, int radius, float angle) {
         double radians = Math.toRadians(angle);
