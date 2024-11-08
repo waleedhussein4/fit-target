@@ -4,32 +4,55 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Edit Profile Icon -->
-    <LinearLayout
+    <!-- Header with Profile Title and Edit Icon -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="16dp">
 
         <TextView
             android:id="@+id/profileText"
             android:layout_width="wrap_content"
-            android:layout_height="162dp"
-            android:text="Profile"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Edit Profile"
             android:textColor="@color/black"
-            android:textSize="35sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/editProfileIcon"
-             android:layout_width="280dp"
-            android:layout_height="45dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
             android:contentDescription="Edit Profile"
             android:padding="4dp"
             android:src="@drawable/ic_edit_profile" />
-    </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Profile Picture Section -->
+    <ImageView
+        android:id="@+id/profilePicture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/topleft"
+   />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Change Picture"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp"
+        android:paddingBottom="16dp" />
 
     <!-- Profile Information Section -->
     <LinearLayout
@@ -69,12 +92,12 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="195dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Email"
-                android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="#333333"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/profileEmail"
@@ -172,7 +195,7 @@
                 android:id="@+id/profileGoalWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="65 kg"
+                android:text="Lose Weight"
                 android:textColor="#666666" />
         </LinearLayout>
 
@@ -222,23 +245,30 @@
                 android:textColor="#666666" />
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Save Button at the Bottom -->
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/black"
+        android:text="Save"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:paddingVertical="12dp"
+        android:layout_gravity="center" />
+
+    <!-- Sign Out Button Positioned Top-Right -->
     <Button
         android:id="@+id/signOutButton"
-        android:layout_width="106dp"
-        android:layout_height="69dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/blue"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:backgroundTint="#FF4500"
         android:text="Sign Out"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp" />
 </LinearLayout>
 
