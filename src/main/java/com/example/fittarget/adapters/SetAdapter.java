@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fittarget.FitTargetDatabaseHelper;
+import com.example.fittarget.LogWorkoutActivity;
 import com.example.fittarget.objects.Exercise;
 import com.example.fittarget.R;
 
@@ -23,14 +24,16 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
     private SetChangeListener setChangeListener;
     private FitTargetDatabaseHelper DB;
     private int exerciseId;
+    private LogWorkoutActivity.WorkoutChangeListener workoutChangeListener;
 
-    public SetAdapter(Context context, List<Exercise.Set> sets, int exerciseId, SetChangeListener setChangeListener) {
+    public SetAdapter(Context context, List<Exercise.Set> sets, int exerciseId, SetChangeListener setChangeListener, LogWorkoutActivity.WorkoutChangeListener workoutChangeListener) {
         this.context = context;
         this.sets = sets;
         this.setChangeListener = setChangeListener;
         this.DB = new FitTargetDatabaseHelper(context);
         this.exerciseId = exerciseId;
-        updateSetIndices();  // Ensure indices are set initially
+        this.workoutChangeListener = workoutChangeListener;
+        updateSetIndices();
     }
 
     public interface SetChangeListener {
@@ -47,23 +50,22 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
     public void addSet() {
         Exercise.Set newSet = new Exercise.Set();
         sets.add(newSet);
-        updateSetIndices();  // Update indices after adding
+        updateSetIndices();
         notifyItemInserted(sets.size() - 1);
-        if (setChangeListener != null) {
-            setChangeListener.onAddSet();
-        }
+        if (setChangeListener != null) setChangeListener.onAddSet();
+        if (workoutChangeListener != null) workoutChangeListener.onWorkoutModified();
     }
 
     public void removeSet(int position) {
         if (position >= 0 && position < sets.size()) {
             sets.remove(position);
-            updateSetIndices();  // Update indices after removal
+            updateSetIndices();
             notifyItemRemoved(position);
-            if (setChangeListener != null) {
-                setChangeListener.onRemoveSet(position);
-            }
+            if (setChangeListener != null) setChangeListener.onRemoveSet(position);
+            if (workoutChangeListener != null) workoutChangeListener.onWorkoutModified();
         }
     }
+
 
     @NonNull
     @Override
@@ -77,7 +79,7 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
         Exercise.Set set = sets.get(position);
 
         // Display set number
-        holder.setNumber.setText(String.format("Set %d", position + 1));
+        holder.setNumber.setText(String.format("%d", position + 1));
 
         // Retrieve and display previous weight and reps for this set
         Exercise.Set previousSet = DB.getPreviousSet(exerciseId, position + 1);
@@ -87,25 +89,29 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
             );
             Log.d("previous set", previousSet.getWeight() + " x " + previousSet.getReps());
         } else {
-            holder.previousWeightReps.setText("NULL"); // Leave blank if no previous data
+            holder.previousWeightReps.setText("N/A"); // if no previous data
         }
 
         // Populate current weight and reps fields if already set
-        holder.currentWeight.setText(String.valueOf(set.getWeight()));
-        holder.currentReps.setText(String.valueOf(set.getReps()));
+        holder.currentWeight.setText(set.getWeight() > 0 ? String.valueOf(set.getWeight()) : "");
+        holder.currentReps.setText(set.getReps() > 0 ? String.valueOf(set.getReps()) : "");
 
-        // Update the weight and reps when focus is lost
+        // Update the weight and reps when focus is lost, with default to 0 if left empty
         holder.currentWeight.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                int weight = Integer.parseInt(holder.currentWeight.getText().toString());
+                String weightText = holder.currentWeight.getText().toString();
+                int weight = weightText.isEmpty() ? 0 : Integer.parseInt(weightText);
                 set.setWeight(weight);
+                if (workoutChangeListener != null) workoutChangeListener.onWorkoutModified();
             }
         });
 
         holder.currentReps.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                int reps = Integer.parseInt(holder.currentReps.getText().toString());
+                String repsText = holder.currentReps.getText().toString();
+                int reps = repsText.isEmpty() ? 0 : Integer.parseInt(repsText);
                 set.setReps(reps);
+                if (workoutChangeListener != null) workoutChangeListener.onWorkoutModified();
             }
         });
 
@@ -115,7 +121,10 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
             if (currentPosition != RecyclerView.NO_POSITION) {
                 removeSet(currentPosition);
             }
+            if (workoutChangeListener != null) workoutChangeListener.onWorkoutModified();
         });
+
+
     }
 
     @Override

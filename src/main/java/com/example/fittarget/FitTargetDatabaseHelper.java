@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.example.fittarget.objects.Exercise;
 import com.example.fittarget.objects.Workout;
+import com.example.fittarget.objects.static_Exercise;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,13 +18,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "fit_target_database";
     private static int DB_VERSION = 4;
     private static final int CURRENT_WORKOUT_ID = 0;
     private Context context;
+    private int WORKOUT_DATASET_VERSION = 2;
 
     public FitTargetDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -33,33 +37,57 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         updateMyDatabase(db, 0, DB_VERSION);
-        db.execSQL("CREATE TABLE exercises (id INTEGER PRIMARY KEY, name TEXT, muscle text)");
 
-        // Load CSV data into the database
+        db.execSQL("CREATE TABLE exercises (id INTEGER PRIMARY KEY, name TEXT, muscle_group text, muscle_specific text)");
         loadExercisesFromCSV(db);
     }
 
     private void loadExercisesFromCSV(SQLiteDatabase db) {
-        AssetManager assetManager = context.getAssets();
-        try (InputStream is = assetManager.open("megaGymDataset.csv");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+        if (WORKOUT_DATASET_VERSION == 1) {
+            AssetManager assetManager = context.getAssets();
+            try (InputStream is = assetManager.open("megaGymDataset.csv");
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
 
-            String line;
-            // Skip the first line (header)
-            reader.readLine();
+                String line;
+                // Skip the first line (header)
+                reader.readLine();
 
-            while ((line = reader.readLine()) != null) {
-                String[] columns = line.split(","); // Adjust separator if needed
-                String exerciseName = columns[1];
-                int exerciseId = Integer.parseInt(columns[0]);
-                String muscle = columns[4];
+                while ((line = reader.readLine()) != null) {
+                    String[] columns = line.split(","); // Adjust separator if needed
+                    String exerciseName = columns[1];
+                    int exerciseId = Integer.parseInt(columns[0]);
+                    String muscle = columns[4];
 
-                // Insert into the database
-                db.execSQL("INSERT INTO exercises (name, id, muscle) VALUES (?, ?, ?)",
-                        new Object[]{exerciseName, exerciseId, muscle});
+                    // Insert into the database
+                    db.execSQL("INSERT INTO exercises (name, id, muscle) VALUES (?, ?, ?)",
+                            new Object[]{exerciseName, exerciseId, muscle});
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else if (WORKOUT_DATASET_VERSION == 2) {
+            AssetManager assetManager = context.getAssets();
+            try (InputStream is = assetManager.open("exercises_with_id.csv");
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+
+                String line;
+                // Skip the first line (header)
+                reader.readLine();
+
+                while ((line = reader.readLine()) != null) {
+                    String[] columns = line.split(",");
+
+                    int exerciseId = Integer.parseInt(columns[0]);
+                    String exerciseName = columns[1];
+                    String muscleGroup = columns[5];
+                    String specificMuscle = columns[6];
+
+                    db.execSQL("INSERT INTO exercises (id, name, muscle_group, muscle_specific) VALUES (?, ?, ?, ?)",
+                            new Object[]{exerciseId, exerciseName, muscleGroup, specificMuscle});
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -146,10 +174,9 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
                     "END_DATE TEXT)");
 
             db.execSQL("CREATE TABLE EXERCISE (" +
-                    "EXERCISE_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "REFERENCE_ID INTEGER," +
                     "WORKOUT_ID INTEGER," +
-                    "EXERCISE_NAME TEXT," +
-                    "MUSCLE TEXT," +
                     "FOREIGN KEY(WORKOUT_ID) REFERENCES WORKOUT(WORKOUT_ID))");
 
             db.execSQL("CREATE TABLE EXERCISE_SET (" +
@@ -158,16 +185,22 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
                     "WEIGHT INTEGER," +
                     "REPS INTEGER," +
                     "SET_INDEX INTEGER," +
-                    "FOREIGN KEY(EXERCISE_ID) REFERENCES EXERCISE(EXERCISE_ID))");
+                    "FOREIGN KEY(EXERCISE_ID) REFERENCES EXERCISE(ID))");
 
         }
     }
 
     public void insertCurrentWorkout(Workout workout) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("WORKOUT", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
-        db.delete("EXERCISE", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
 
+        // Delete sets, exercises, and the workout itself for the current workout ID
+        db.execSQL("DELETE FROM EXERCISE_SET WHERE EXISTS (" +
+                        "SELECT 1 FROM EXERCISE WHERE EXERCISE_SET.EXERCISE_ID = EXERCISE.ID AND EXERCISE.WORKOUT_ID = ?)",
+                new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+        db.delete("EXERCISE", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+        db.delete("WORKOUT", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+
+        // Insert workout data
         ContentValues workoutValues = new ContentValues();
         workoutValues.put("WORKOUT_ID", CURRENT_WORKOUT_ID);
         workoutValues.put("SETS", workout.getSets());
@@ -176,11 +209,11 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         workoutValues.put("END_DATE", workout.getEndDate() != null ? String.valueOf(workout.getEndDate().getTime()) : null);
         db.insert("WORKOUT", null, workoutValues);
 
+        // Insert exercises and their sets
         for (Exercise exercise : workout.getExercises()) {
             ContentValues exerciseValues = new ContentValues();
             exerciseValues.put("WORKOUT_ID", CURRENT_WORKOUT_ID);
-            exerciseValues.put("EXERCISE_NAME", exercise.getName());
-            exerciseValues.put("MUSCLE", exercise.getMuscle());
+            exerciseValues.put("REFERENCE_ID", exercise.getReferenceId());
             long exerciseId = db.insert("EXERCISE", null, exerciseValues);
 
             for (Exercise.Set set : exercise.getSets()) {
@@ -194,6 +227,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
+
 
     public Workout getUserCurrentWorkout() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -212,14 +246,13 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
             workout.setStartDate(new Date(Long.parseLong(startDateStr)));
             if (endDateStr != null) workout.setEndDate(new Date(Long.parseLong(endDateStr)));
 
-            Cursor exerciseCursor = db.query("EXERCISE", new String[]{"EXERCISE_ID", "EXERCISE_NAME"}, "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)}, null, null, null);
+            Cursor exerciseCursor = db.query("EXERCISE", new String[]{"ID", "REFERENCE_ID"}, "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)}, null, null, null);
             List<Exercise> exercises = new ArrayList<>();
 
             while (exerciseCursor.moveToNext()) {
-                String exerciseName = exerciseCursor.getString(exerciseCursor.getColumnIndex("EXERCISE_NAME"));
-                int exerciseId = exerciseCursor.getInt(exerciseCursor.getColumnIndex("EXERCISE_ID"));
-                String exerciseMuscle = exerciseCursor.getString(exerciseCursor.getColumnIndex("MUSCLE"));
-                Exercise exercise = new Exercise(exerciseName, exerciseId, exerciseMuscle);
+                int exerciseId = exerciseCursor.getInt(exerciseCursor.getColumnIndex("ID"));
+                int exerciseReferenceId = exerciseCursor.getInt(exerciseCursor.getColumnIndex("REFERENCE_ID"));
+                Exercise exercise = new Exercise(exerciseReferenceId, context);
 
                 Cursor setCursor = db.query("EXERCISE_SET", new String[]{"WEIGHT", "REPS"}, "EXERCISE_ID = ?", new String[]{String.valueOf(exerciseId)}, null, null, null);
                 List<Exercise.Set> setsList = new ArrayList<>();
@@ -244,7 +277,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteCurrentWorkout() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("EXERCISE_SET", "EXERCISE_ID IN (SELECT EXERCISE_ID FROM EXERCISE WHERE WORKOUT_ID = ?)", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+        db.delete("EXERCISE_SET", "EXERCISE_ID IN (SELECT ID FROM EXERCISE WHERE WORKOUT_ID = ?)", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
         db.delete("EXERCISE", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
         db.delete("WORKOUT", "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
         db.close();
@@ -262,9 +295,8 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
         for (Exercise exercise : workout.getExercises()) {
             ContentValues exerciseValues = new ContentValues();
+            exerciseValues.put("REFERENCE_ID", exercise.getReferenceId());
             exerciseValues.put("WORKOUT_ID", workoutId);
-            exerciseValues.put("EXERCISE_NAME", exercise.getName());
-            exerciseValues.put("MUSCLE", exercise.getMuscle());
             long exerciseId = db.insert("EXERCISE", null, exerciseValues);
 
             for (Exercise.Set set : exercise.getSets()) {
@@ -279,20 +311,20 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Exercise.Set getPreviousSet(int exerciseId, int setIndex) {
+    public Exercise.Set getPreviousSet(int exerciseReferenceId, int setIndex) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Log.d("EXERCISE ID", String.valueOf(exerciseId));
+        Log.d("EXERCISE REFERENCE ID", String.valueOf(exerciseReferenceId));
         Log.d("SET INDEX", String.valueOf(setIndex));
 
-        // Query to get the latest completed set data for the given exercise ID and set index
+        // Query to get the latest completed set data for the given reference ID and set index
         Cursor cursor = db.rawQuery(
                 "SELECT es.WEIGHT, es.REPS " +
                         "FROM EXERCISE_SET es " +
-                        "JOIN EXERCISE e ON es.EXERCISE_ID = e.EXERCISE_ID " +
+                        "JOIN EXERCISE e ON es.EXERCISE_ID = e.ID " +
                         "JOIN WORKOUT w ON e.WORKOUT_ID = w.WORKOUT_ID " +
-                        "WHERE e.EXERCISE_ID = ? AND es.SET_INDEX = ? AND w.WORKOUT_ID != 0 " +
+                        "WHERE e.REFERENCE_ID = ? AND es.SET_INDEX = ? AND w.WORKOUT_ID != ? " +
                         "ORDER BY w.END_DATE DESC LIMIT 1",
-                new String[]{String.valueOf(exerciseId), String.valueOf(setIndex)}
+                new String[]{String.valueOf(exerciseReferenceId), String.valueOf(setIndex), String.valueOf(CURRENT_WORKOUT_ID)}
         );
 
         Exercise.Set previousSet = null;
@@ -306,17 +338,18 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return previousSet;
     }
 
-    public List<Exercise> getAllExercises() {
-        List<Exercise> exercises = new ArrayList<>();
+    public List<static_Exercise> getAllExercises() {
+        List<static_Exercise> exercises = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM exercises", null);
 
         if (cursor.moveToFirst()) {
             do {
-                Exercise exercise = new Exercise(
-                        cursor.getString(cursor.getColumnIndex("name")),
+                static_Exercise exercise = new static_Exercise(
                         cursor.getInt(cursor.getColumnIndex("id")),
-                        cursor.getString(cursor.getColumnIndex("muscle"))
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        cursor.getString(cursor.getColumnIndex("muscle_group")),
+                        cursor.getString(cursor.getColumnIndex("muscle_specific"))
                 );
                 exercises.add(exercise);
             } while (cursor.moveToNext());
@@ -325,4 +358,29 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return exercises;
     }
 
+    public Map<String, String> getExerciseDetails(int referenceId) {
+        Map<String, String> details = new HashMap<>();
+        AssetManager assetManager = context.getAssets();
+        try (InputStream is = assetManager.open("exercises_with_id.csv");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+
+            String line;
+            reader.readLine(); // Skip header line
+
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+                int id = Integer.parseInt(columns[0]);
+
+                if (id == referenceId) {
+                    details.put("name", columns[1]);
+                    details.put("muscle_group", columns[5]);
+                    details.put("specific_muscle", columns[6]);
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return details;
+    }
 }

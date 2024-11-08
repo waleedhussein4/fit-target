@@ -1,33 +1,29 @@
 package com.example.fittarget.objects;
 
+import android.content.Context;
+
+import com.example.fittarget.FitTargetDatabaseHelper;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Exercise implements Serializable {
-    private int id;
-    private String name;
+    private int referenceId;
     private List<Set> sets;
-    private String muscle;
+    private FitTargetDatabaseHelper DB;
 
-    public Exercise(String name, int id, String muscle) {
-        this.name = name;
+    public Exercise(int referenceId, Context context) {
         this.sets = new ArrayList<>();
-        this.id = id;
-        this.muscle = muscle;
+        this.referenceId = referenceId;
+        DB = new FitTargetDatabaseHelper(context);
     }
 
-    public Exercise(String name, List<Set> sets) {
-        this.name = name;
+    public Exercise(int referenceId, List<Set> sets, Context context) {
+        this.referenceId = referenceId;
         this.sets = sets;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        DB = new FitTargetDatabaseHelper(context);
     }
 
     public List<Set> getSets() {
@@ -39,23 +35,31 @@ public class Exercise implements Serializable {
     }
 
     public void addSet(Set set) {
-        this.sets.add(set); // Assuming `sets` is a List<Set> in the Exercise class
+        this.sets.add(set);
     }
 
-    public int getId() {
-        return id;
+    public int getReferenceId() {
+        return referenceId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setReferenceId(int id) {
+        this.referenceId = id;
     }
 
-    public String getMuscle() {
-        return muscle;
+    private Map<String, String> getExerciseDetails() {
+        return DB.getExerciseDetails(this.referenceId);
     }
 
-    public void setMuscle(String muscle) {
-        this.muscle = muscle;
+    public String getName() {
+        return getExerciseDetails().getOrDefault("name", "Unknown");
+    }
+
+    public String getMuscleGroup() {
+        return getExerciseDetails().getOrDefault("muscle_group", "Unknown");
+    }
+
+    public String getSpecificMuscle() {
+        return getExerciseDetails().getOrDefault("specific_muscle", "Unknown");
     }
 
     public static class Set {
