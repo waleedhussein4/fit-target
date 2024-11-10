@@ -384,11 +384,13 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return details;
     }
 
+
     public Map<String, Integer> getMuscleGroupFrequency() {
         SQLiteDatabase db = this.getReadableDatabase();
         Map<String, Integer> frequencyMap = new HashMap<>();
-        Cursor cursor = db.rawQuery("SELECT exercises.muscle_group, COUNT(*) AS frequency FROM EXERCISE " +
-                "JOIN exercises ON EXERCISE.id = exercises.id " +
+        Cursor cursor = db.rawQuery("SELECT exercises.muscle_group, COUNT(exercises.muscle_group) AS frequency " +
+                "FROM EXERCISE " +
+                "JOIN exercises ON EXERCISE.REFERENCE_ID = exercises.id " +  // Corrected join
                 "GROUP BY exercises.muscle_group", null);
 
         if (cursor.moveToFirst()) {
@@ -406,6 +408,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
 
 
+
     // Retrieve weight lifted over time for a muscle group for line chart
     public Map<String, Integer> getWeightOverTime(String muscleGroup) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -413,9 +416,9 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT WORKOUT.START_DATE, SUM(EXERCISE_SET.WEIGHT) AS total_weight " +
                         "FROM EXERCISE_SET " +
                         "JOIN EXERCISE ON EXERCISE_SET.EXERCISE_ID = EXERCISE.ID " +
-                        "JOIN exercises ON EXERCISE.id = exercises.id " +  // Adjusted join to connect with exercises table
+                        "JOIN exercises ON EXERCISE.REFERENCE_ID = exercises.id " +  // Corrected join
                         "JOIN WORKOUT ON EXERCISE.WORKOUT_ID = WORKOUT.WORKOUT_ID " +
-                        "WHERE exercises.muscle_group = ? " +  // Use muscle_group from exercises table
+                        "WHERE exercises.muscle_group = ? " +
                         "GROUP BY WORKOUT.START_DATE ORDER BY WORKOUT.START_DATE",
                 new String[]{muscleGroup});
 
@@ -423,6 +426,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
             do {
                 String date = cursor.getString(cursor.getColumnIndex("START_DATE"));
                 int weight = cursor.getInt(cursor.getColumnIndex("total_weight"));
+                Log.d("WeightOverTimeDebug", "Date: " + date + ", Weight: " + weight);
                 weightMap.put(date, weight);
             } while (cursor.moveToNext());
         }
@@ -430,6 +434,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return weightMap;
     }
+
 
     public List<String> getDistinctBodyParts() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -440,6 +445,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
             do {
                 String muscleGroup = cursor.getString(cursor.getColumnIndex("muscle_group"));
                 bodyParts.add(muscleGroup);
+                Log.d("DistinctBodyPartsDebug", "Muscle Group: " + muscleGroup);
             } while (cursor.moveToNext());
         }
         cursor.close();
