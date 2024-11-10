@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.database.Cursor;
+
 
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.Map;
+import java.util.HashMap;
 
 
 import androidx.activity.EdgeToEdge;
@@ -23,19 +27,32 @@ import com.example.fittarget.objects.Workout;
 public class HomePageActivity extends AppCompatActivity {
 
     FitTargetDatabaseHelper DB = new FitTargetDatabaseHelper(this);
-
+    private TextView usernameText;
+    private TextView currentWeightText;
+    private TextView targetWeightText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home_page);
 
+        usernameText = findViewById(R.id.usernameText);
+
+        // Retrieve user ID (if stored in session or passed via Intent)
+        int userId = getUserId();
+        currentWeightText = findViewById(R.id.currentWeightText); // Ensure ID matches XML
+        targetWeightText = findViewById(R.id.targetWeightText);
+        // Fetch username from database and update UI
+        String username = DB.getUsername(userId);
+        usernameText.setText(username != null ? username : "User");
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-       
+
+        loadUserWeights(userId);
 
         Workout importedWorkout = DB.getUserCurrentWorkout();
         if (importedWorkout != null) {
@@ -72,6 +89,19 @@ public class HomePageActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
             }
         });
+
+    }
+    private void loadUserWeights(int userId) {
+        Map<String, Integer> weights = DB.getUserWeight(userId);
+        if (weights != null) {
+            currentWeightText.setText(weights.get("currentWeight") + " kg");
+            targetWeightText.setText(weights.get("targetWeight") + " kg");
+        }
+    }
+
+    private int getUserId() {
+        // Retrieve the user ID from SharedPreferences, Intent, or session data
+        return 1; // Replace with actual user ID fetching logic
     }
 }
 

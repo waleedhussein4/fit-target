@@ -453,4 +453,32 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return bodyParts;
     }
 
+    public String getUsername(int userId) {
+        String username = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Corrected to use "USER_ID" instead of "id"
+        Cursor cursor = db.rawQuery("SELECT NAME FROM USER_INFO WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            username = cursor.getString(cursor.getColumnIndex("NAME"));
+        }
+        cursor.close();
+        return username;
+    }
+
+    public Map<String, Integer> getUserWeight(int userId) {
+        Map<String, Integer> weights = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT WEIGHT, WEIGHT_TARGET FROM USER_INFO WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            weights.put("currentWeight", cursor.getInt(cursor.getColumnIndex("WEIGHT")));
+            weights.put("targetWeight", cursor.getInt(cursor.getColumnIndex("WEIGHT_TARGET")));
+        }
+        cursor.close();
+        db.close();
+        return weights;
+    }
+
+
 }
