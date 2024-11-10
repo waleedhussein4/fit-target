@@ -8,9 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-        <!-- Banner Section with Centered Title and Subtitle -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,91 +37,41 @@
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <!-- Rest of your layout -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_margin="16dp"
             app:cardElevation="4dp"
             app:cardCornerRadius="8dp"
-            android:padding="8dp">
+            android:padding="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select Muscle Group"
+                    android:text="Tap 'Generate Report' to view your workout analysis, including muscle group frequency and weight progress over time."
                     android:textSize="16sp"
-                    android:paddingBottom="4dp"/>
+                    android:textColor="#555555"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp"/>
 
-                <Spinner
-                    android:id="@+id/muscleGroupSpinner"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/submitAllButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:drawable/btn_dropdown"/>
+                    android:text="Generate Report"
+                    android:textSize="18sp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#4682B4"
+                    android:padding="12dp"
+                    android:layout_gravity="center_horizontal"
+                    android:elevation="6dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-        <EditText
-            android:id="@+id/weightInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter weight lifted (kg)"
-            android:inputType="numberDecimal"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/repsInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter number of reps"
-            android:inputType="number"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select a date"
-            android:textSize="16sp"
-            android:layout_marginBottom="4dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
-
-            <DatePicker
-                android:id="@+id/datePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/submitButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit Workout"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"/>
-
-        <Button
-            android:id="@+id/submitAllButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Generate Report"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"/>
-
-        <TableLayout
-            android:id="@+id/tableLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
     </LinearLayout>
 </ScrollView>

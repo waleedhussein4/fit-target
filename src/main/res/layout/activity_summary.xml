@@ -58,18 +58,11 @@
                 android:text="Select Muscle Group for Weight Tracking"
                 android:layout_marginTop="16dp"/>
 
+            <!-- Body Part Spinner -->
             <Spinner
                 android:id="@+id/bodyPartSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <!-- Button to generate the line chart -->
-            <Button
-                android:id="@+id/generateGraphButton"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Generate Graph"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"/>
 
             <!-- LineChart to display the weight lifted over time -->
