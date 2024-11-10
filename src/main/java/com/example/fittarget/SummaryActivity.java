@@ -110,6 +110,7 @@ public class SummaryActivity extends AppCompatActivity {
         LineDataSet dataSet = new LineDataSet(entries, "Weight Over Time in KG");
 
         // Set text size for the values displayed on the line chart
+        dataSet.setLineWidth(4f); // Adjust the value as needed (default is 2f)
         dataSet.setValueTextSize(12f); // Adjust the size as needed
         dataSet.setValueTextColor(Color.BLACK); // Optional: Set to black or another contrasting color
 
