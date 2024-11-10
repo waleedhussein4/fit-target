@@ -55,7 +55,7 @@
             android:layout_height="89dp"
             android:layout_marginTop="4dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Benjamin"
+            android:text="`Username"
 
             android:textColor="#000000"
             android:textSize="55sp"
@@ -251,9 +251,10 @@
                 android:textSize="25sp" />
 
             <TextView
+                android:id="@+id/currentWeightText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="90 kg"
+                android:text="0 kg"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
         </LinearLayout>
@@ -272,9 +273,10 @@
                 android:textSize="25sp" />
 
             <TextView
+                android:id="@+id/targetWeightText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="80 kg"
+                android:text="0 kg"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
         </LinearLayout>
