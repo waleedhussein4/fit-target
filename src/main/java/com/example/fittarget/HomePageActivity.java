@@ -23,6 +23,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.fittarget.objects.Workout;
+import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -53,6 +54,10 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
         loadUserWeights(userId);
+        loadTotalWorkoutTime();
+        loadMostActiveDay();
+        loadTotalExercises();
+        loadMostRecentWorkout();
 
         Workout importedWorkout = DB.getUserCurrentWorkout();
         if (importedWorkout != null) {
@@ -89,14 +94,51 @@ public class HomePageActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
             }
         });
-
     }
+
+    private void loadMostRecentWorkout() {
+        Map<String, String> recentWorkout = DB.getMostRecentWorkout();
+        TextView recentWorkoutsText = findViewById(R.id.recentWorkoutsText);
+
+        if (recentWorkout.isEmpty()) {
+            recentWorkoutsText.setText("No recent workouts available.");
+        } else {
+            StringBuilder workoutDetails = new StringBuilder();
+            workoutDetails.append("Most Recent Workout:\n");
+            workoutDetails.append("Start: ").append(recentWorkout.get("startDate")).append("\n");
+            workoutDetails.append("End: ").append(recentWorkout.get("endDate")).append("\n");
+            workoutDetails.append("Sets: ").append(recentWorkout.get("sets")).append("\n");
+            workoutDetails.append("Volume: ").append(recentWorkout.get("volume"));
+            recentWorkoutsText.setText(workoutDetails.toString());
+        }
+    }
+
+
+
     private void loadUserWeights(int userId) {
         Map<String, Integer> weights = DB.getUserWeight(userId);
         if (weights != null) {
             currentWeightText.setText(weights.get("currentWeight") + " kg");
             targetWeightText.setText(weights.get("targetWeight") + " kg");
         }
+    }
+
+    private void loadMostActiveDay() {
+        String mostActiveDay = DB.getMostActiveDay();
+        TextView activeDayText = findViewById(R.id.activeDayText);
+        activeDayText.setText("Most Active Day: " + mostActiveDay);
+    }
+
+    private void loadTotalWorkoutTime() {
+        int totalMinutes = DB.getTotalWorkoutTime();
+        TextView workoutTimeText = findViewById(R.id.workoutTimeText);
+        workoutTimeText.setText("Total Time: " + totalMinutes + " mins");
+    }
+
+    private void loadTotalExercises() {
+        int totalExercises = DB.getTotalExercises();
+        TextView exercisesText = findViewById(R.id.exercisesText);
+        exercisesText.setText("Number of Exercises: " + totalExercises);
     }
 
     private int getUserId() {

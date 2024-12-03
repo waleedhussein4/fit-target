@@ -480,5 +480,92 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return weights;
     }
 
+    public Map<String, String> getMostRecentWorkout() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT strftime('%Y-%m-%d %H:%M:%S', START_DATE) AS FormattedStartDate, " +
+                        "strftime('%Y-%m-%d %H:%M:%S', END_DATE) AS FormattedEndDate, " +
+                        "SETS, VOLUME " +
+                        "FROM WORKOUT ORDER BY START_DATE DESC LIMIT 1",
+                null
+        );
+
+        Map<String, String> workoutDetails = new HashMap<>();
+        if (cursor.moveToFirst()) {
+            workoutDetails.put("startDate", cursor.getString(cursor.getColumnIndex("FormattedStartDate")));
+            workoutDetails.put("endDate", cursor.getString(cursor.getColumnIndex("FormattedEndDate")));
+            workoutDetails.put("sets", String.valueOf(cursor.getInt(cursor.getColumnIndex("SETS"))));
+            workoutDetails.put("volume", String.valueOf(cursor.getInt(cursor.getColumnIndex("VOLUME"))));
+        }
+        cursor.close();
+        db.close();
+        return workoutDetails;
+    }
+
+    public int getTotalExercises() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT COUNT(*) AS ExerciseCount FROM EXERCISE",
+                null
+        );
+
+        int totalExercises = 0;
+        if (cursor.moveToFirst()) {
+            totalExercises = cursor.getInt(cursor.getColumnIndex("ExerciseCount"));
+        }
+        cursor.close();
+        db.close();
+        return totalExercises;
+    }
+
+
+    public String getMostActiveDay() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to get the day of the week and its frequency
+        Cursor cursor = db.rawQuery(
+                "SELECT strftime('%w', START_DATE) AS Day, COUNT(*) AS Frequency " +
+                        "FROM WORKOUT " +
+                        "GROUP BY Day " +
+                        "ORDER BY Frequency DESC LIMIT 1",
+                null
+        );
+
+        String mostActiveDay = "Unknown";
+        if (cursor.moveToFirst()) {
+            int dayIndex = cursor.getInt(cursor.getColumnIndex("Day"));
+            String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+            mostActiveDay = days[dayIndex];
+        }
+
+        cursor.close();
+        db.close();
+        return mostActiveDay;
+    }
+
+
+
+    public int getTotalWorkoutTime() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM((julianday(END_DATE) - julianday(START_DATE)) * 24 * 60) AS TotalMinutes " +
+                        "FROM WORKOUT",
+                null
+        );
+
+        int totalMinutes = 0;
+        if (cursor.moveToFirst()) {
+            totalMinutes = cursor.getInt(cursor.getColumnIndex("TotalMinutes"));
+        }
+        cursor.close();
+        db.close();
+        return totalMinutes;
+    }
+
+
+
+
+
+
 
 }
