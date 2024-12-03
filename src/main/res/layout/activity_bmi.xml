@@ -33,6 +33,67 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp" />
 
+    <LinearLayout
+        android:id="@+id/genderSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/rounded_container"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginEnd="20dp" />
+
+        <EditText
+            android:id="@+id/genderInput"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:inputType="numberDecimal"
+            android:hint="Male"
+            android:textColorHint="@color/black"
+            android:gravity="center"
+            android:background="@drawable/rounded_edittext" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ageSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/rounded_container"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Age"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginEnd="20dp" />
+
+        <EditText
+            android:id="@+id/ageInput"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:hint="29"
+            android:textColorHint="@color/black"
+            android:gravity="center"
+            android:background="@drawable/rounded_edittext" />
+    </LinearLayout>
+
+
     <!-- Height Section -->
     <LinearLayout
         android:id="@+id/heightSection"
@@ -143,80 +204,15 @@
             android:layout_marginStart="10dp" />
     </LinearLayout>
 
-    <!-- Goal Weight Section -->
-    <LinearLayout
-        android:id="@+id/goalWeightSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@drawable/rounded_container"
-        android:padding="12dp"
-        android:layout_marginBottom="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Goal Weight"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_marginEnd="20dp" />
 
-        <EditText
-            android:id="@+id/goalWeightInput"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:inputType="numberDecimal"
-            android:hint="79"
-            android:textColorHint="@color/black"
-            android:gravity="center"
-            android:background="@drawable/rounded_edittext" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="kg"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_marginStart="10dp" />
-    </LinearLayout>
-
-    <!-- Age Section -->
-    <LinearLayout
-        android:id="@+id/ageSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@drawable/rounded_container"
-        android:padding="12dp"
-        android:layout_marginBottom="12dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Age"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_marginEnd="20dp" />
-
-        <EditText
-            android:id="@+id/ageInput"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:inputType="number"
-            android:hint="29"
-            android:textColorHint="@color/black"
-            android:gravity="center"
-            android:background="@drawable/rounded_edittext" />
-    </LinearLayout>
 
     <Button
         android:id="@+id/calculateBmiButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+
         android:background="@drawable/rounded_button"
         android:text="Calculate your BMI"
         android:textColor="@color/white"

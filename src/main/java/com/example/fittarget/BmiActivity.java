@@ -30,18 +30,18 @@ Cursor cursor;
         String userEmail = getIntent().getStringExtra("userEmail");
         FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(BmiActivity.this);
         db = fitTargetDatabaseHelper.getReadableDatabase();
-        cursor = db.rawQuery("SELECT AGE, HEIGHT, WEIGHT, WEIGHT_TARGET FROM USER_INFO WHERE EMAIL = ?", new String[]{userEmail});
+        cursor = db.rawQuery("SELECT AGE, HEIGHT, WEIGHT, GENDER FROM USER_INFO WHERE EMAIL = ?", new String[]{userEmail});
         EditText ageEditText = findViewById(R.id.ageInput);
         EditText heightEditText = findViewById(R.id.heightInput);
         EditText weightEditText = findViewById(R.id.weightInput);
-        EditText goalWeightEditText = findViewById(R.id.goalWeightInput);
+        EditText genderEditText = findViewById(R.id.genderInput);
 
         if (cursor.moveToFirst()) {
 
             int age = cursor.getInt(cursor.getColumnIndexOrThrow("AGE"));
             float height = cursor.getFloat(cursor.getColumnIndexOrThrow("HEIGHT"));
             float weight = cursor.getFloat(cursor.getColumnIndexOrThrow("WEIGHT"));
-            float targetWeight = cursor.getFloat(cursor.getColumnIndexOrThrow("WEIGHT_TARGET"));
+            String gender = cursor.getString(cursor.getColumnIndexOrThrow("GENDER"));
 
             ageEditText.setText(String.valueOf(age));
             ageEditText.setTextColor(getResources().getColor(R.color.black));
@@ -49,8 +49,8 @@ Cursor cursor;
             heightEditText.setTextColor(getResources().getColor(R.color.black));
             weightEditText.setText(String.format("%.1f", weight));
             weightEditText.setTextColor(getResources().getColor(R.color.black));
-            goalWeightEditText.setText(String.format("%.1f", targetWeight));
-            goalWeightEditText.setTextColor(getResources().getColor(R.color.black));
+            genderEditText.setText(gender);
+            genderEditText.setTextColor(getResources().getColor(R.color.black));
             cursor.close();
             db.close();
         }
