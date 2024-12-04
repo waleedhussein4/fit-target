@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import com.example.fittarget.objects.Exercise;
 import com.example.fittarget.objects.Workout;
 import com.example.fittarget.objects.static_Exercise;
@@ -519,29 +521,43 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+
     public String getMostActiveDay() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Query to get the day of the week and its frequency
+        // Query to find the most active day
         Cursor cursor = db.rawQuery(
-                "SELECT strftime('%w', START_DATE) AS Day, COUNT(*) AS Frequency " +
+                "SELECT START_DATE, COUNT(*) AS Frequency " +
                         "FROM WORKOUT " +
-                        "GROUP BY Day " +
+                        "GROUP BY strftime('%Y-%m-%d', START_DATE / 1000, 'unixepoch') " +
                         "ORDER BY Frequency DESC LIMIT 1",
                 null
         );
 
         String mostActiveDay = "Unknown";
         if (cursor.moveToFirst()) {
-            int dayIndex = cursor.getInt(cursor.getColumnIndex("Day"));
-            String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-            mostActiveDay = days[dayIndex];
+            // Get the timestamp (in milliseconds)
+            long startDateMillis = cursor.getLong(cursor.getColumnIndex("START_DATE"));
+
+            // Convert timestamp to Date
+            Date date = new Date(startDateMillis);
+
+            // Format the Date to get the day of the week
+            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+            String dayOfWeek = dayFormat.format(date);
+
+            // Get the frequency of workouts
+            int frequency = cursor.getInt(cursor.getColumnIndex("Frequency"));
+
+            // Return the day of the week and its frequency
+            mostActiveDay = "Most Active Day: " + dayOfWeek + " (" + frequency + " workouts)";
         }
 
         cursor.close();
         db.close();
         return mostActiveDay;
     }
+
 
 
 
@@ -562,10 +578,24 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return totalMinutes;
     }
 
+    public String getMostRecentStartDate() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT strftime('%Y-%m-%d %H:%M:%S', START_DATE) AS FormattedStartDate " +
+                        "FROM WORKOUT ORDER BY START_DATE DESC LIMIT 1",
+                null
+        );
 
-
-
-
+        String startDate = "No Workouts Found";
+        if (cursor.moveToFirst()) {
+            startDate = cursor.getString(cursor.getColumnIndex("FormattedStartDate"));
+        }
+        cursor.close();
+        db.close();
+        return startDate;
+    }
 
 
 }
+
+

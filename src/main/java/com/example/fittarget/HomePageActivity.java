@@ -41,8 +41,6 @@ public class HomePageActivity extends AppCompatActivity {
 
         // Retrieve user ID (if stored in session or passed via Intent)
         int userId = getUserId();
-        currentWeightText = findViewById(R.id.currentWeightText); // Ensure ID matches XML
-        targetWeightText = findViewById(R.id.targetWeightText);
         // Fetch username from database and update UI
         String username = DB.getUsername(userId);
         usernameText.setText(username != null ? username : "User");
@@ -52,8 +50,6 @@ public class HomePageActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        loadUserWeights(userId);
         loadTotalWorkoutTime();
         loadMostActiveDay();
         loadTotalExercises();
@@ -105,45 +101,37 @@ public class HomePageActivity extends AppCompatActivity {
         } else {
             StringBuilder workoutDetails = new StringBuilder();
             workoutDetails.append("Most Recent Workout:\n");
-            workoutDetails.append("Start: ").append(recentWorkout.get("startDate")).append("\n");
-            workoutDetails.append("End: ").append(recentWorkout.get("endDate")).append("\n");
             workoutDetails.append("Sets: ").append(recentWorkout.get("sets")).append("\n");
-            workoutDetails.append("Volume: ").append(recentWorkout.get("volume"));
+            workoutDetails.append("Volume: ").append(recentWorkout.get("volume") + "kg");
             recentWorkoutsText.setText(workoutDetails.toString());
         }
     }
 
 
-
-    private void loadUserWeights(int userId) {
-        Map<String, Integer> weights = DB.getUserWeight(userId);
-        if (weights != null) {
-            currentWeightText.setText(weights.get("currentWeight") + " kg");
-            targetWeightText.setText(weights.get("targetWeight") + " kg");
-        }
-    }
-
     private void loadMostActiveDay() {
-        String mostActiveDay = DB.getMostActiveDay();
+        String mostActiveDay = DB.getMostActiveDay() ;
         TextView activeDayText = findViewById(R.id.activeDayText);
-        activeDayText.setText("Most Active Day: " + mostActiveDay);
+        activeDayText.setText(mostActiveDay+"");
     }
+
 
     private void loadTotalWorkoutTime() {
         int totalMinutes = DB.getTotalWorkoutTime();
         TextView workoutTimeText = findViewById(R.id.workoutTimeText);
-        workoutTimeText.setText("Total Time: " + totalMinutes + " mins");
+        workoutTimeText.setText(totalMinutes +"min");
     }
 
     private void loadTotalExercises() {
         int totalExercises = DB.getTotalExercises();
         TextView exercisesText = findViewById(R.id.exercisesText);
-        exercisesText.setText("Number of Exercises: " + totalExercises);
+        exercisesText.setText(totalExercises+" exercises");
     }
 
     private int getUserId() {
         // Retrieve the user ID from SharedPreferences, Intent, or session data
         return 1; // Replace with actual user ID fetching logic
     }
+
+
 }
 
