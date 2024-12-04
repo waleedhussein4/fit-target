@@ -1,215 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:padding="16dp">
 
-    <!-- Profile Icon -->
+    <!-- Small Icon Above Greeting Section -->
     <ImageView
         android:id="@+id/smallIcon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="118dp"
+        android:layout_height="89dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/topleft"
-        android:contentDescription="Profile icon"
+        android:layout_marginEnd="13dp"
         android:backgroundTint="@color/gray"
-        android:clickable="true" />
+        android:clickable="true"
+        android:src="@drawable/topleft" />
 
     <!-- Greeting Section -->
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
+        android:layout_width="253dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/smallIcon"
+        android:layout_marginTop="-108dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/helloText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
             android:text="Hello,"
             android:textColor="#B3B3B3"
-            android:textSize="50sp"
-            android:layout_marginBottom="8dp" />
+            android:textSize="50sp" />
 
         <TextView
             android:id="@+id/usernameText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
             android:text="Username"
-            android:textColor="#212121"
+            android:textColor="#000000"
             android:textSize="55sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:ellipsize="none" />
     </LinearLayout>
 
-    <!-- Dashboard Section -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@id/linearLayout2"
-        android:layout_above="@id/bottomNavigation"
-        android:layout_marginTop="16dp">
+    <!-- Weekly Stats Section -->
 
+    <!-- Bottom Navigation -->
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="497dp"
+        android:layout_height="544dp"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <!-- Weekly Stats Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Weekly Stats"
+            android:textColor="#3D3D3D"
+            android:textSize="35sp"
+            android:textStyle="bold|italic" />
+
+        <!-- Weekly Stats Content -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:gravity="center"
+            android:orientation="horizontal"
             android:padding="16dp">
 
-            <!-- Recent Workouts Section -->
+            <!-- Calories Burnt -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_blue"
+                android:elevation="2dp"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:padding="8dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp">
+                android:padding="12dp">
 
-                <TextView
-                    android:id="@+id/recentWorkoutsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Recent Workouts: Loading..."
-                    android:textSize="18sp"
-                    android:textColor="#212121" />
-            </LinearLayout>
-
-            <!-- Current Weight -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp">
-
-                <TextView
-                    android:id="@+id/currentWeightText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Current Weight: Loading..."
-                    android:textSize="18sp"
-                    android:textColor="#212121" />
+                <ImageView
+                    android:layout_width="58dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_fire" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kg"
-                    android:textSize="16sp"
-                    android:textColor="#212121" />
-            </LinearLayout>
-
-            <!-- Target Weight -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp">
-
-                <TextView
-                    android:id="@+id/targetWeightText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Target Weight: Loading..."
-                    android:textSize="18sp"
-                    android:textColor="#212121" />
+                    android:layout_marginTop="4dp"
+                    android:text="2,154"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kg"
-                    android:textSize="16sp"
-                    android:textColor="#212121" />
+                    android:text="kcal burnt"
+                    android:textColor="#A5A5A5"
+                    android:textSize="25sp" />
             </LinearLayout>
 
-            <!-- Other Dashboard Sections (Calories, Exercises, etc.) -->
+            <!-- Total Time -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="6dp"
+                android:layout_height="146dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_green"
+                android:elevation="2dp"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:padding="8dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp">
+                android:padding="12dp">
 
-                <TextView
-                    android:id="@+id/caloriesText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calories: Loading..."
-                    android:textSize="18sp"
-                    android:textColor="#212121" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp">
-
-                <TextView
-                    android:id="@+id/exercisesText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Number of Exercises: Loading..."
-                    android:textSize="18sp"
-                    android:textColor="#212121" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp">
-
-                <TextView
-                    android:id="@+id/activeDayText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Most Active Day: Loading..."
-                    android:textSize="18sp"
-                    android:textColor="#212121" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp">
+                <ImageView
+                    android:layout_width="71dp"
+                    android:layout_height="58dp"
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:id="@+id/workoutTimeText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Time: Loading..."
-                    android:textSize="18sp"
-                    android:textColor="#212121" />
+                    android:layout_marginTop="4dp"
+                    android:text="0min"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <!-- recent workout -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="149dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_orange"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/recentWorkoutsText"
+                    android:layout_width="130dp"
+                    android:layout_height="110dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:padding="8dp"
+                    android:text="Recent Workout"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Exercises Count and Most Active Day Row -->
+
+        <!-- Weight Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="227dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <!-- Exercises Count -->
+
+            <!-- Most Active Day -->
+            <LinearLayout
+                android:layout_width="34dp"
+                android:layout_height="113dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_grey"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="58dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_exercice" />
+
+                <TextView
+                    android:id="@+id/exercisesText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="126 exercises"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="49dp"
+                android:layout_height="113dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner_background_grey"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/activeDayText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Most active day"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 
-    <!-- Bottom Navigation -->
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
@@ -255,6 +281,7 @@
             android:textColor="#FFFFFF" />
     </LinearLayout>
 </RelativeLayout>
+
 
 
 
