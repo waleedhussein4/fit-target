@@ -33,6 +33,18 @@
             android:contentDescription="Edit Profile"
             android:padding="4dp"
             android:src="@drawable/ic_edit_profile" />
+
+        <Button
+            android:id="@+id/signOutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#FF4500"
+            android:text="Sign Out"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
     </RelativeLayout>
 
     <!-- Profile Picture Section -->
@@ -69,18 +81,40 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="339dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Name"
+
+                android:text="First Name"
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/profileFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="John"
+                android:textColor="#666666" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="339dp"
+                android:layout_height="wrap_content"
+
+                android:text="Last Name"
                 android:textStyle="bold"
                 android:textColor="#333333" />
 
             <TextView
-                android:id="@+id/profileName"
+                android:id="@+id/profileLastName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="John Doe"
+                android:text="Doe"
                 android:textColor="#666666" />
         </LinearLayout>
 
@@ -92,18 +126,40 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="195dp"
+                android:layout_width="221dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="Email"
                 android:textColor="#333333"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/profileEmail"
-                android:layout_width="wrap_content"
+                android:layout_width="344dp"
                 android:layout_height="wrap_content"
                 android:text="example@example.com"
+                android:textColor="#666666" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="339dp"
+                android:layout_height="wrap_content"
+
+                android:text="Gender"
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/genderTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="male"
                 android:textColor="#666666" />
         </LinearLayout>
 
@@ -115,18 +171,18 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="339dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="Age"
                 android:textStyle="bold"
                 android:textColor="#333333" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profileAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25"
+                android:hint="25"
                 android:textColor="#666666" />
         </LinearLayout>
 
@@ -138,18 +194,18 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="339dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="Height"
                 android:textStyle="bold"
                 android:textColor="#333333" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profileHeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="180 cm"
+               android:hint="180"
                 android:textColor="#666666" />
         </LinearLayout>
 
@@ -161,22 +217,21 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="339dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Weight"
                 android:textStyle="bold"
                 android:textColor="#333333" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profileWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="70 kg"
+                android:hint="70 kg"
                 android:textColor="#666666" />
         </LinearLayout>
 
-        <!-- Goal Weight -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -184,41 +239,38 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="339dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Goal Weight"
-                android:textStyle="bold"
-                android:textColor="#333333" />
-
-            <TextView
-                android:id="@+id/profileGoalWeight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lose Weight"
-                android:textColor="#666666" />
-        </LinearLayout>
-
-        <!-- Target Weight -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Target Weight"
                 android:textStyle="bold"
                 android:textColor="#333333" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profileTargetWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="70 kg"
+                android:hint="70 kg"
+                android:textColor="#666666" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="339dp"
+                android:layout_height="wrap_content"
+                android:text="Target Period"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+
+            <EditText
+                android:id="@+id/profileTargetPeriod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="60"
                 android:textColor="#666666" />
         </LinearLayout>
 
@@ -230,18 +282,17 @@
             android:paddingVertical="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="339dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Weight Measurement Preference"
                 android:textStyle="bold"
                 android:textColor="#333333" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profileMeasurementPreference"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Metric"
+               android:hint="Daily"
                 android:textColor="#666666" />
         </LinearLayout>
     </LinearLayout>
@@ -259,16 +310,7 @@
         android:paddingVertical="12dp"
         android:layout_gravity="center" />
 
-    <!-- Sign Out Button Positioned Top-Right -->
-    <Button
-        android:id="@+id/signOutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:backgroundTint="#FF4500"
-        android:text="Sign Out"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:layout_marginTop="8dp" />
+
+
 </LinearLayout>
 

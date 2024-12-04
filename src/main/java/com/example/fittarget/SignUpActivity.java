@@ -36,7 +36,8 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                EditText nameEdit = findViewById(R.id.nameEditText);
+                EditText firstNameEdit = findViewById(R.id.firstNameEditText);
+                EditText lastNameEdit = findViewById(R.id.lastNameEditText);
                 EditText emailEdit = findViewById(R.id.emailEditText);
                 EditText passwordEdit = findViewById(R.id.passwordEditText);
                 EditText ageEdit = findViewById(R.id.ageEditText);
@@ -44,22 +45,26 @@ public class SignUpActivity extends AppCompatActivity {
                 EditText weightEdit = findViewById(R.id.weightEditText);
                 RadioGroup genderGroup = findViewById(R.id.genderRadioGroup);
                 RadioGroup weightMGroup = findViewById(R.id.preferenceGroup);
-                RadioGroup weightCGroup = findViewById(R.id.weightControlChoice);
                 EditText weightTarget = findViewById(R.id.targetEditText);
                 EditText weightPeriod = findViewById(R.id.periodTargetEditText);
                 TextView genderText = findViewById(R.id.genderTextView);
                 TextView measText = findViewById(R.id.measurementPrefTextView);
-                TextView weight_control = findViewById(R.id.weightControlTextView);
+
 
 
                 final String[] genderHolder = {""};
                 final String[] measHolder ={""};
-                final String[] weight_control_holder = {""};
                 boolean isValid = true;
 
-                String name = nameEdit.getText().toString().trim();
-                if (name.isEmpty()) {
-                    nameEdit.setError("Name is required");
+                String firstName = firstNameEdit.getText().toString().trim();
+                if (firstName.isEmpty()) {
+                    firstNameEdit.setError("First name is required");
+                    isValid = false;
+                }
+
+                String lastName = lastNameEdit.getText().toString().trim();
+                if (lastName.isEmpty()) {
+                    lastNameEdit.setError("Last name is required");
                     isValid = false;
                 }
 
@@ -125,22 +130,7 @@ public class SignUpActivity extends AppCompatActivity {
                    measHolder[0] = measButton.getText().toString();
                 }
                 String measurement = measHolder[0];
-                weightCGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                    if (checkedId != -1) {
-                        weight_control.setError(null);
-                    }
-                });
-                int selectedControl = weightCGroup.getCheckedRadioButtonId();
-                if (selectedControl == -1) {
-                    weight_control.setError("Weight control choice is required");
-                    isValid = false;
-                }
-                else {
-                    int controlButtonId = weightCGroup.getCheckedRadioButtonId();
-                    RadioButton controlButton = findViewById(controlButtonId);
-                    weight_control_holder[0] = controlButton.getText().toString();
-                }
-                String weight_control_choice = weight_control_holder[0];
+
                 String weight_target = weightTarget.getText().toString().trim();
                 if (weight_target.isEmpty()) {
                     weightTarget.setError("Weight target is required");
@@ -161,8 +151,8 @@ public class SignUpActivity extends AppCompatActivity {
                 if (isValid){
 
                     db = fitTargetDatabaseHelper.getWritableDatabase();
-                    fitTargetDatabaseHelper.insertUser(db,name,email,password,Integer.parseInt(age),Integer.parseInt(weight),
-                            Integer.parseInt(height),gender, measurement, weight_control_choice,Integer.parseInt(weight_target),
+                    fitTargetDatabaseHelper.insertUser(db,firstName,lastName,email,password,Integer.parseInt(age),Integer.parseInt(weight),
+                            Integer.parseInt(height),gender, measurement, Integer.parseInt(weight_target),
                             Integer.parseInt(weight_period)
                             );
                     db.close();

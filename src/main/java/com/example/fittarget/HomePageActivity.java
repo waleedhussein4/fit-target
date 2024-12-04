@@ -86,6 +86,7 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomePageActivity.this, ProfileActivity.class);
+                intent.putExtra("userEmail", email);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
             }

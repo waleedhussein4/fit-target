@@ -100,9 +100,10 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // User data methods remain unchanged
-    public void insertUser(SQLiteDatabase db, String name, String email, String password, int age, int weight, int height, String gender, String weightMeasurementPreference, String weightControl, int weightTarget, int periodTarget) {
+    public void insertUser(SQLiteDatabase db, String firstName,String lastName, String email, String password, int age, int weight, int height, String gender, String weightMeasurementPreference, int weightTarget, int periodTarget) {
         ContentValues userValues = new ContentValues();
-        userValues.put("NAME", name);
+        userValues.put("FIRST_NAME", firstName);
+        userValues.put("LAST_NAME", lastName);
         userValues.put("GENDER", gender);
         userValues.put("EMAIL", email);
         userValues.put("PASSWORD", password);
@@ -110,7 +111,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         userValues.put("WEIGHT", weight);
         userValues.put("HEIGHT", height);
         userValues.put("WEIGHT_MEASUREMENT_PREFERENCE", weightMeasurementPreference);
-        userValues.put("WEIGHT_CONTROL", weightControl);
         userValues.put("WEIGHT_TARGET", weightTarget);
         userValues.put("PERIOD_TARGET", periodTarget);
         db.insert("USER_INFO", null, userValues);
@@ -156,7 +156,8 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 1) {
             db.execSQL("CREATE TABLE USER_INFO (" +
                     "USER_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "NAME TEXT," +
+                    "FIRST_NAME TEXT," +
+                    "LAST_NAME TEXT," +
                     "GENDER TEXT," +
                     "EMAIL TEXT," +
                     "PASSWORD TEXT," +
@@ -164,7 +165,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
                     "WEIGHT INTEGER," +
                     "HEIGHT INTEGER," +
                     "WEIGHT_MEASUREMENT_PREFERENCE TEXT," +
-                    "WEIGHT_CONTROL TEXT," +
                     "WEIGHT_TARGET INTEGER," +
                     "PERIOD_TARGET INTEGER)");
 
@@ -459,10 +459,10 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         String username = null;
         SQLiteDatabase db = this.getReadableDatabase();
         // Corrected to use "USER_ID" instead of "id"
-        Cursor cursor = db.rawQuery("SELECT NAME FROM USER_INFO WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
+        Cursor cursor = db.rawQuery("SELECT FIRST_NAME FROM USER_INFO WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
 
         if (cursor.moveToFirst()) {
-            username = cursor.getString(cursor.getColumnIndex("NAME"));
+            username = cursor.getString(cursor.getColumnIndex("FIRST_NAME"));
         }
         cursor.close();
         return username;
