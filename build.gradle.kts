@@ -48,4 +48,5 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.glide)
+    implementation("androidx.work:work-runtime:2.8.0") // WorkManager
 }

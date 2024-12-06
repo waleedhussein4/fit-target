@@ -162,6 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Integer.parseInt(height),gender, measurement, Integer.parseInt(weight_target),
                             Integer.parseInt(weight_period)
                             );
+                    fitTargetDatabaseHelper.insertWeightRecord(Integer.parseInt(weight));
                     db.close();
                     Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
                     intent.putExtra("userEmail",email);

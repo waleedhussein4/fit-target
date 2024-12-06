@@ -702,6 +702,16 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void insertWeightRecord(float weight) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("weight", weight);  // Store the weight value
+        contentValues.put("date", new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date())); // Store the current date
+
+        db.insert("WEIGHT_RECORD", null, contentValues);  // Insert the record into the 'weight_records' table
+        db.close();
+    }
 }
 
 
