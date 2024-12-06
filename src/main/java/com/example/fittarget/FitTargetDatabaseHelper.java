@@ -7,9 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import com.example.fittarget.objects.Exercise;
 import com.example.fittarget.objects.Workout;
 import com.example.fittarget.objects.static_Exercise;
@@ -100,7 +102,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // User data methods remain unchanged
-    public void insertUser(SQLiteDatabase db, String firstName,String lastName, String email, String password, int age, int weight, int height, String gender, String weightMeasurementPreference, int weightTarget, int periodTarget) {
+    public void insertUser(SQLiteDatabase db, String firstName, String lastName, String email, String password, int age, int weight, int height, String gender, String weightMeasurementPreference, int weightTarget, int periodTarget) {
         ContentValues userValues = new ContentValues();
         userValues.put("FIRST_NAME", firstName);
         userValues.put("LAST_NAME", lastName);
@@ -189,6 +191,10 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
                     "SET_INDEX INTEGER," +
                     "FOREIGN KEY(EXERCISE_ID) REFERENCES EXERCISE(ID))");
 
+            db.execSQL("CREATE TABLE WEIGHT_RECORD (" +
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "WEIGHT REAL, " +
+                    "DATE TEXT)");
         }
     }
 
@@ -229,7 +235,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
-
 
     public Workout getUserCurrentWorkout() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -409,8 +414,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     // Retrieve weight lifted over time for a muscle group for line chart
     public Map<String, Integer> getWeightOverTime(String muscleGroup) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -521,7 +524,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
     public String getMostActiveDay() {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -559,8 +561,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     public int getTotalWorkoutTime() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
@@ -595,6 +595,112 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return startDate;
     }
 
+    public Map<String, String> getLocalUserInfo() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Map<String, String> userInfo = new HashMap<>();
+
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM USER LIMIT 1", null);
+
+            if (cursor.moveToFirst()) {
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
+                    userInfo.put(cursor.getColumnName(i), cursor.getString(i));
+                }
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return userInfo;
+    }
+
+    public boolean updateLocalUser(
+            String firstName, String lastName, String email, int age,
+            float height, float weight, String gender,
+            float weightTarget, int periodTarget, String weightMeasurementPreference) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("FIRST_NAME", firstName);
+        contentValues.put("LAST_NAME", lastName);
+        contentValues.put("EMAIL", email);
+        contentValues.put("AGE", age);
+        contentValues.put("HEIGHT", height);
+        contentValues.put("WEIGHT", weight);
+        contentValues.put("GENDER", gender);
+        contentValues.put("WEIGHT_TARGET", weightTarget);
+        contentValues.put("PERIOD_TARGET", periodTarget);
+        contentValues.put("WEIGHT_MEASUREMENT_PREFERENCE", weightMeasurementPreference);
+
+        int rowsUpdated = db.update("USER", contentValues, "EMAIL = ?", new String[]{email});
+        db.close();
+
+        return rowsUpdated > 0; // Return true if at least one row was updated
+    }
+
+
+    public String getLastWeightEntryDate() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String lastDate = null;
+
+        try {
+            // Query to fetch the last weight entry date
+            Cursor cursor = db.rawQuery(
+                    "SELECT date FROM WEIGHT_RECORD ORDER BY date DESC LIMIT 1",
+                    null // No parameters needed since there's only one user
+            );
+
+            if (cursor.moveToFirst()) {
+                lastDate = cursor.getString(0);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return lastDate;
+    }
+
+    public void addWeightEntry(double weight) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put("WEIGHT", weight);
+            values.put("DATE", new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()));
+
+            // Since there’s only one user, we don't need to include USER_ID explicitly
+            db.insert("WEIGHT_RECORD", null, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+    }
+
+    public boolean isWeightEntryRequired() {
+        String lastDate = getLastWeightEntryDate();
+        if (lastDate == null) {
+            // No weight entry exists, entry is required
+            return true;
+        }
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String today = sdf.format(new Date());
+            // Return true if the last entry date is not today
+            return !today.equals(lastDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Assume entry is required in case of an error
+            return true;
+        }
+    }
 
 }
 
