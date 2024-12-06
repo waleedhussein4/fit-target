@@ -30,7 +30,7 @@ Cursor cursor;
         String userEmail = getIntent().getStringExtra("userEmail");
         FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(BmiActivity.this);
         db = fitTargetDatabaseHelper.getReadableDatabase();
-        cursor = db.rawQuery("SELECT AGE, HEIGHT, WEIGHT, GENDER FROM USER_INFO WHERE EMAIL = ?", new String[]{userEmail});
+        cursor = db.rawQuery("SELECT AGE, HEIGHT, WEIGHT, GENDER FROM USER WHERE EMAIL = ?", new String[]{userEmail});
         EditText ageEditText = findViewById(R.id.ageInput);
         EditText heightEditText = findViewById(R.id.heightInput);
         EditText weightEditText = findViewById(R.id.weightInput);

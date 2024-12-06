@@ -113,12 +113,12 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         userValues.put("WEIGHT_MEASUREMENT_PREFERENCE", weightMeasurementPreference);
         userValues.put("WEIGHT_TARGET", weightTarget);
         userValues.put("PERIOD_TARGET", periodTarget);
-        db.insert("USER_INFO", null, userValues);
+        db.insert("USER", null, userValues);
     }
 
     public boolean isEmailUsed(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("USER_INFO", new String[]{"EMAIL"}, "EMAIL = ?", new String[]{email}, null, null, null);
+        Cursor cursor = db.query("USER", new String[]{"EMAIL"}, "EMAIL = ?", new String[]{email}, null, null, null);
 
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
@@ -128,7 +128,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
     public String[] getStoredUserCredentials() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("USER_INFO", new String[]{"EMAIL", "PASSWORD"}, null, null, null, null, null, "1");
+        Cursor cursor = db.query("USER", new String[]{"EMAIL", "PASSWORD"}, null, null, null, null, null, "1");
 
         if (cursor != null && cursor.moveToFirst()) {
             String email = cursor.getString(cursor.getColumnIndex("EMAIL"));
@@ -144,7 +144,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
     public boolean validateUser(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("USER_INFO", new String[]{"EMAIL"}, "EMAIL = ? AND PASSWORD = ?", new String[]{email, password}, null, null, null);
+        Cursor cursor = db.query("USER", new String[]{"EMAIL"}, "EMAIL = ? AND PASSWORD = ?", new String[]{email, password}, null, null, null);
 
         boolean isValid = cursor.getCount() > 0;
         cursor.close();
@@ -154,7 +154,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
     public void updateMyDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 1) {
-            db.execSQL("CREATE TABLE USER_INFO (" +
+            db.execSQL("CREATE TABLE USER (" +
                     "USER_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "FIRST_NAME TEXT," +
                     "LAST_NAME TEXT," +
@@ -459,7 +459,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         String username = null;
         SQLiteDatabase db = this.getReadableDatabase();
         // Corrected to use "USER_ID" instead of "id"
-        Cursor cursor = db.rawQuery("SELECT FIRST_NAME FROM USER_INFO WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
+        Cursor cursor = db.rawQuery("SELECT FIRST_NAME FROM USER WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
 
         if (cursor.moveToFirst()) {
             username = cursor.getString(cursor.getColumnIndex("FIRST_NAME"));
@@ -471,7 +471,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     public Map<String, Integer> getUserWeight(int userId) {
         Map<String, Integer> weights = new HashMap<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT WEIGHT, WEIGHT_TARGET FROM USER_INFO WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
+        Cursor cursor = db.rawQuery("SELECT WEIGHT, WEIGHT_TARGET FROM USER WHERE USER_ID = ?", new String[]{String.valueOf(userId)});
 
         if (cursor.moveToFirst()) {
             weights.put("currentWeight", cursor.getInt(cursor.getColumnIndex("WEIGHT")));

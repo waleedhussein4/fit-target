@@ -33,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         String userEmail = getIntent().getStringExtra("userEmail");
         FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(ProfileActivity.this);
         db = fitTargetDatabaseHelper.getReadableDatabase();
-         cursor = db.rawQuery("SELECT FIRST_NAME, LAST_NAME, EMAIL, AGE, HEIGHT, WEIGHT, GENDER, WEIGHT_TARGET, PERIOD_TARGET, WEIGHT_MEASUREMENT_PREFERENCE FROM USER_INFO WHERE EMAIL = ?", new String[]{userEmail});
+         cursor = db.rawQuery("SELECT FIRST_NAME, LAST_NAME, EMAIL, AGE, HEIGHT, WEIGHT, GENDER, WEIGHT_TARGET, PERIOD_TARGET, WEIGHT_MEASUREMENT_PREFERENCE FROM USER WHERE EMAIL = ?", new String[]{userEmail});
         TextView firstNameText = findViewById(R.id.profileFirstName);
         TextView lastNameText = findViewById(R.id.profileLastName);
         TextView emailText = findViewById(R.id.profileEmail);
@@ -110,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
             contentValues.put("PERIOD_TARGET", updatedPeriodTarget);
             contentValues.put("WEIGHT_MEASUREMENT_PREFERENCE", updatedMeasurementPreference);
 
-            int rowsUpdated = db.update("USER_INFO", contentValues, "EMAIL = ?", new String[]{userEmail});
+            int rowsUpdated = db.update("USER", contentValues, "EMAIL = ?", new String[]{userEmail});
             if (rowsUpdated > 0) {
                 Toast.makeText(ProfileActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
             } else {

@@ -57,7 +57,7 @@ public class SignInActivity extends AppCompatActivity {
                         String[] selectionArgs = {email};
 
 
-                        cursor = db.query("USER_INFO", columns, selection, selectionArgs, null, null, null);
+                        cursor = db.query("USER", columns, selection, selectionArgs, null, null, null);
 
                         if (cursor != null && cursor.moveToFirst()) {
                             String storedPassword = cursor.getString(cursor.getColumnIndexOrThrow("PASSWORD"));
