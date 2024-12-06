@@ -69,6 +69,7 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
         String email = getIntent().getStringExtra("userEmail");
+
         TextView bmiBtn = findViewById(R.id.BmiButton);
         bmiBtn.setOnClickListener(view -> {
             Intent intent = new Intent(HomePageActivity.this, BmiActivity.class);

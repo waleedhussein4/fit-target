@@ -17,6 +17,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private SQLiteDatabase db;
@@ -34,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
         readyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
 
                 EditText firstNameEdit = findViewById(R.id.firstNameEditText);
@@ -144,6 +149,8 @@ public class SignUpActivity extends AppCompatActivity {
                     isValid = false;
 
                 }
+                createUser(email,password,firstName,lastName,Integer.parseInt(age),Float.parseFloat(height), Float.parseFloat(weight),
+                        gender, measurement, Float.parseFloat(weight_target), Integer.parseInt(weight_period));
                 FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(SignUpActivity.this);
                 if (fitTargetDatabaseHelper.isEmailUsed(email)) {
                     emailEdit.setError("Email is already in use. Please choose another email.");
@@ -163,5 +170,37 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+    private void createUser(String email, String password, String firstName, String lastName,
+                            int age, float height, float weight, String gender, String measurementPreference,
+                            float weightTarget, int weightPeriod) {
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setAge(age);
+        user.setHeight(height);
+        user.setWeight(weight);
+        user.setGender(gender);
+        user.setWeightMeasurementPreference(measurementPreference);
+        user.setWeightTarget(weightTarget);
+        user.setPeriodTarget(weightPeriod);
+        RetrofitClient.getInstance().getUserService().createUser(user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(SignUpActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Failed to create user", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(SignUpActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
 
