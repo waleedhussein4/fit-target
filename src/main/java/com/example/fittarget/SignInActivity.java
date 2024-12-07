@@ -14,6 +14,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SignInActivity extends AppCompatActivity {
     SQLiteDatabase db;
     Cursor cursor;
@@ -86,6 +90,7 @@ public class SignInActivity extends AppCompatActivity {
                             db.close();
                         }
                     }
+                    performSignIn(email, password);
                     if(isValid){
                         Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
                         intent.putExtra("userEmail",email);
@@ -93,5 +98,25 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+    private void performSignIn(String email, String password) {
+        SignInRequest signInRequest = new SignInRequest(email, password);
+
+        RetrofitClient.getInstance().getUserService().signIn(signInRequest).enqueue(new Callback<SignInResponse>() {
+            @Override
+            public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Access the message from the JSON response
+                    String message = response.body().getMessage();
+                    Toast.makeText(SignInActivity.this, message, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SignInActivity.this, "Sign in failed. Check your credentials.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<SignInResponse> call, Throwable t) {
+                Toast.makeText(SignInActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

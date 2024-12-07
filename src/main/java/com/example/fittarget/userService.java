@@ -12,8 +12,11 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Path;
 
 public interface userService {
-        @GET("/users")
-        Call<List<User>> getUsers();
+
+        @POST("/user/signin")
+        Call<SignInResponse> signIn(@Body SignInRequest signInRequest);
+
+
 
         @POST("/user/signup")
         Call<User> createUser(@Body User user);
