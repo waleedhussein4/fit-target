@@ -8,7 +8,11 @@
     <string name="addExercisePrompt">Get started by adding an exercise</string>
     <string name="addExercise">+ Add Exercise</string>
 
-
+    <string-array name="measurement_preferences">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Disabled</item>
+    </string-array>
     <!-- Muscle group options for the Spinner -->
     <string-array name="muscle_groups">
         <item>Legs</item>
