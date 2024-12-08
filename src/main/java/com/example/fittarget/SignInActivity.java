@@ -1,7 +1,7 @@
 package com.example.fittarget;
 
+import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
@@ -19,9 +19,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
-    SQLiteDatabase db;
-    Cursor cursor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,70 +32,29 @@ public class SignInActivity extends AppCompatActivity {
 
         Button goBtn = findViewById(R.id.signInButton);
         goBtn.setOnClickListener(view -> {
-                    Boolean isValid = true;
-                    EditText emailEditText = findViewById(R.id.emailEditText);
-                    String email = emailEditText.getText().toString();
-                    if (email.isEmpty()) {
-                        emailEditText.setError("Email is required!");
-                        isValid=false;
-                    }
-                    EditText passwordEditText = findViewById(R.id.passwordEditText);
-                    String password = passwordEditText.getText().toString();
-                    if(password.isEmpty()){
-                        passwordEditText.setError("Password is required!");
-                        isValid=false;
-                    }
-                    FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(SignInActivity.this);
-                    try {
-                        db = fitTargetDatabaseHelper.getReadableDatabase();
-                        String[] columns = {"EMAIL", "PASSWORD"};
+            // Validate inputs
+            EditText emailEditText = findViewById(R.id.emailEditText);
+            String email = emailEditText.getText().toString().trim();
+            EditText passwordEditText = findViewById(R.id.passwordEditText);
+            String password = passwordEditText.getText().toString().trim();
 
+            boolean isValid = true;
 
-                        String selection = "EMAIL = ?";
+            if (email.isEmpty()) {
+                emailEditText.setError("Email is required!");
+                isValid = false;
+            }
+            if (password.isEmpty()) {
+                passwordEditText.setError("Password is required!");
+                isValid = false;
+            }
 
-
-
-                        String[] selectionArgs = {email};
-
-
-                        cursor = db.query("USER", columns, selection, selectionArgs, null, null, null);
-
-                        if (cursor != null && cursor.moveToFirst()) {
-                            String storedPassword = cursor.getString(cursor.getColumnIndexOrThrow("PASSWORD"));
-
-                            if (storedPassword.equals(password)) {
-                                isValid = true;
-
-                            } else {
-                                isValid = false;
-                                passwordEditText.setError("Incorrect Password. Please try again!");
-                            }
-                        } else {
-                                 isValid = false;
-                            emailEditText.setError("Incorrect Email! Please try again!");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        isValid= false;
-                        Toast.makeText(SignInActivity.this, "Error accessing database.", Toast.LENGTH_SHORT).show();
-                    } finally {
-
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                        if (db != null) {
-                            db.close();
-                        }
-                    }
-                    performSignIn(email, password);
-                    if(isValid){
-                        Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
-                        intent.putExtra("userEmail",email);
-                        startActivity(intent);
-                    }
-                });
-
+            if (isValid) {
+                performSignIn(email, password);
+            }
+        });
     }
+
     private void performSignIn(String email, String password) {
         SignInRequest signInRequest = new SignInRequest(email, password);
 
@@ -106,17 +62,53 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Access the message from the JSON response
                     String message = response.body().getMessage();
+                    User user = response.body().getUser();
+
+                    saveUserDetailsLocally(user);
+
                     Toast.makeText(SignInActivity.this, message, Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
+                    intent.putExtra("userEmail", user.getEmail());
+                    startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(SignInActivity.this, "Sign in failed. Check your credentials.", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<SignInResponse> call, Throwable t) {
                 Toast.makeText(SignInActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void saveUserDetailsLocally(User user) {
+        FitTargetDatabaseHelper dbHelper = new FitTargetDatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("FIRST_NAME", user.getFirstName());
+        values.put("LAST_NAME", user.getLastName());
+        values.put("EMAIL", user.getEmail());
+        values.put("PASSWORD", user.getPassword());
+        values.put("AGE", user.getAge());
+        values.put("HEIGHT", user.getHeight());
+        values.put("WEIGHT", user.getWeight());
+        values.put("GENDER", user.getGender());
+        values.put("WEIGHT_TARGET", user.getWeightTarget());
+        values.put("PERIOD_TARGET", user.getPeriodTarget());
+        values.put("WEIGHT_MEASUREMENT_PREFERENCE", user.getWeightMeasurementPreference());
+
+        // Try updating first in case user exists already
+        int rowsUpdated = db.update("USER", values, "EMAIL = ?", new String[]{user.getEmail()});
+        if (rowsUpdated == 0) {
+            // If no rows were updated, insert a new user row
+            db.insert("USER", null, values);
+        }
+
+        db.close();
     }
 }
