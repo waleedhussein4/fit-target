@@ -149,24 +149,9 @@ public class SignUpActivity extends AppCompatActivity {
                     isValid = false;
 
                 }
-                createUser(email,password,firstName,lastName,Integer.parseInt(age),Float.parseFloat(height), Float.parseFloat(weight),
-                        gender, measurement, Float.parseFloat(weight_target), Integer.parseInt(weight_period));
-                FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(SignUpActivity.this);
-                if (fitTargetDatabaseHelper.isEmailUsed(email)) {
-                    emailEdit.setError("Email is already in use. Please choose another email.");
-                }
-                if (isValid){
-
-                    db = fitTargetDatabaseHelper.getWritableDatabase();
-                    fitTargetDatabaseHelper.insertUser(db,firstName,lastName,email,password,Integer.parseInt(age),Integer.parseInt(weight),
-                            Integer.parseInt(height),gender, measurement, Integer.parseInt(weight_target),
-                            Integer.parseInt(weight_period)
-                            );
-                    fitTargetDatabaseHelper.insertWeightRecord(Integer.parseInt(weight));
-                    db.close();
-                    Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
-                    intent.putExtra("userEmail",email);
-                    startActivity(intent);
+                if(isValid) {
+                    createUser(email, password, firstName, lastName, Integer.parseInt(age), Float.parseFloat(height), Float.parseFloat(weight),
+                            gender, measurement, Float.parseFloat(weight_target), Integer.parseInt(weight_period));
                 }
             }
         });
@@ -191,6 +176,20 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
+                    FitTargetDatabaseHelper fitTargetDatabaseHelper = new FitTargetDatabaseHelper(SignUpActivity.this);
+
+                        db = fitTargetDatabaseHelper.getWritableDatabase();
+                        fitTargetDatabaseHelper.insertUser(db,firstName,lastName,email,password,Integer.parseInt(String.valueOf(age)),Float.parseFloat(String.valueOf(weight)),
+                                Float.parseFloat(String.valueOf(height)),gender, measurementPreference, Float.parseFloat(String.valueOf(weightTarget)),
+                                Integer.parseInt(String.valueOf(weightPeriod))
+                        );
+                        fitTargetDatabaseHelper.insertWeightRecord(Integer.parseInt(String.valueOf(weight)));
+                        db.close();
+                        Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
+                        intent.putExtra("userEmail",email);
+                        startActivity(intent);
+
+
                     finish();
                 } else {
                     Toast.makeText(SignUpActivity.this, "Failed to create user", Toast.LENGTH_SHORT).show();

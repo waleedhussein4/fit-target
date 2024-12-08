@@ -102,7 +102,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // User data methods remain unchanged
-    public void insertUser(SQLiteDatabase db, String firstName, String lastName, String email, String password, int age, int weight, int height, String gender, String weightMeasurementPreference, int weightTarget, int periodTarget) {
+    public void insertUser(SQLiteDatabase db, String firstName, String lastName, String email, String password, int age, float weight, float height, String gender, String weightMeasurementPreference, float weightTarget, int periodTarget) {
         ContentValues userValues = new ContentValues();
         userValues.put("FIRST_NAME", firstName);
         userValues.put("LAST_NAME", lastName);
@@ -164,10 +164,10 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
                     "EMAIL TEXT," +
                     "PASSWORD TEXT," +
                     "AGE INTEGER," +
-                    "WEIGHT INTEGER," +
-                    "HEIGHT INTEGER," +
+                    "WEIGHT FLOAT," +
+                    "HEIGHT FLOAT," +
                     "WEIGHT_MEASUREMENT_PREFERENCE TEXT," +
-                    "WEIGHT_TARGET INTEGER," +
+                    "WEIGHT_TARGET FLOAT," +
                     "PERIOD_TARGET INTEGER)");
 
             db.execSQL("CREATE TABLE WORKOUT (" +
