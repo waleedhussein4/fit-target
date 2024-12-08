@@ -561,22 +561,31 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int getTotalWorkoutTime() {
+    public int calculateTotalWorkoutTime() {
+        int totalWorkoutTime = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(
-                "SELECT SUM((julianday(END_DATE) - julianday(START_DATE)) * 24 * 60) AS TotalMinutes " +
-                        "FROM WORKOUT",
-                null
-        );
 
-        int totalMinutes = 0;
-        if (cursor.moveToFirst()) {
-            totalMinutes = cursor.getInt(cursor.getColumnIndex("TotalMinutes"));
+        String query = "SELECT START_DATE, END_DATE FROM WORKOUT";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                // Get START_DATE and END_DATE
+                long startDate = cursor.getLong(cursor.getColumnIndexOrThrow("START_DATE"));
+                long endDate = cursor.getLong(cursor.getColumnIndexOrThrow("END_DATE"));
+
+                // Calculate the duration for this workout
+                long duration = endDate - startDate;
+
+                // Add to the total
+                totalWorkoutTime += duration;
+            }
+            cursor.close();
         }
-        cursor.close();
-        db.close();
-        return totalMinutes;
+
+        return totalWorkoutTime; // Total time in milliseconds
     }
+
 
     public String getMostRecentStartDate() {
         SQLiteDatabase db = this.getReadableDatabase();

@@ -67,6 +67,14 @@ public class HomePageActivity extends AppCompatActivity {
         if (importedWorkout != null) {
             startActivity(new Intent(this, LogWorkoutActivity.class));
         }
+        String email = userInfo.get("EMAIL");
+        TextView homeButton = findViewById(R.id.homeButton);
+        homeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePageActivity.this, HomePageActivity.class);
+            intent.putExtra("userEmail", email);
+            startActivity(intent);
+            startActivity(intent);
+        });
 
         TextView startWorkoutButton = findViewById(R.id.button_startWorkout);
 
@@ -75,7 +83,7 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        String email = userInfo.get("EMAIL");
+
 
         TextView bmiBtn = findViewById(R.id.BmiButton);
         bmiBtn.setOnClickListener(view -> {
@@ -121,7 +129,8 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void loadTotalWorkoutTime() {
-        int totalMinutes = DB.getTotalWorkoutTime();
+        long totalWorkoutTimeMillis = DB.calculateTotalWorkoutTime();
+        long totalMinutes = totalWorkoutTimeMillis / (1000 * 60);
         TextView workoutTimeText = findViewById(R.id.workoutTimeText);
         workoutTimeText.setText(totalMinutes + "min");
     }
