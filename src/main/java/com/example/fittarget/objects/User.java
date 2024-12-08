@@ -1,4 +1,4 @@
-package com.example.fittarget;
+package com.example.fittarget.objects;
 
 public class User {
 

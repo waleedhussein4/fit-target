@@ -2,9 +2,11 @@ package com.example.fittarget;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,11 +17,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.fittarget.APIRequests.SyncCheckRequest;
+import com.example.fittarget.APIResponses.SyncStatusResponse;
+import com.example.fittarget.APIServices.SyncService;
+
+import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
 
 public class ProfileActivity extends AppCompatActivity {
     FitTargetDatabaseHelper DB = new FitTargetDatabaseHelper(this);
     Map<String, String> userInfo;
+    private TextView syncStatus;
+    private Button syncButton;
+    private ProgressBar syncProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +60,9 @@ public class ProfileActivity extends AppCompatActivity {
         EditText weightTargetEditText = findViewById(R.id.profileTargetWeight);
         EditText periodTargetEditText = findViewById(R.id.profileTargetPeriod);
         Spinner measurementPreferenceSpinner = findViewById(R.id.profileMeasurementPreference);
+        syncStatus = findViewById(R.id.sync_status);
+        syncButton = findViewById(R.id.sync_button);
+        syncProgressBar = findViewById(R.id.sync_progress_bar);
 
         // Set values for text fields
         firstNameText.setText(userInfo.get("FIRST_NAME"));
@@ -116,5 +131,41 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(ProfileActivity.this, "Invalid input. Please check your entries.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        fetchSyncStatus();
     }
+
+    private void fetchSyncStatus() {
+        SyncCheckRequest syncRequest = new SyncCheckRequest(DB);
+
+        RetrofitClient.getInstance().getSyncService().checkSyncStatus(syncRequest).enqueue(new retrofit2.Callback<SyncStatusResponse>() {
+            @Override
+            public void onResponse(Call<SyncStatusResponse> call, retrofit2.Response<SyncStatusResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    SyncStatusResponse syncStatusResponse = response.body();
+                    if (syncStatusResponse.isSynced()) {
+                        syncStatus.setText("You are up to date.");
+                        syncButton.setEnabled(false); // Disable button if already synced
+                    }
+                    else {
+                        syncStatus.setText("You have unsynced data.");
+                        syncButton.setEnabled(true); // Enable button if unsynced data
+                    }
+                } else {
+                    handleSyncError("Failed to fetch sync status.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SyncStatusResponse> call, Throwable t) {
+                handleSyncError("Error: Unable to fetch sync status.");
+            }
+        });
+    }
+
+    private void handleSyncError(String message) {
+        syncStatus.setText(message);
+        syncButton.setEnabled(false); // Disable button on failure
+    }
+
 }

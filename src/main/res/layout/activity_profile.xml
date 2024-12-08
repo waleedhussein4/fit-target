@@ -205,13 +205,13 @@
                 android:layout_height="wrap_content"
                 android:hint="180"
                 android:textColor="#666666" />
+
             <TextView
                 android:id="@+id/heightUnit"
-                android:text="  cm"
-                android:textSize="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:text="  cm"
+                android:textSize="20dp" />
         </LinearLayout>
 
         <!-- Weight -->
@@ -234,13 +234,13 @@
                 android:layout_height="wrap_content"
                 android:hint="70"
                 android:textColor="#666666" />
+
             <TextView
                 android:id="@+id/weightUnit"
-                android:text="  kg"
-                android:textSize="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:text="  kg"
+                android:textSize="20dp" />
         </LinearLayout>
 
 
@@ -266,11 +266,10 @@
 
             <TextView
                 android:id="@+id/targetweightUnit"
-                android:text="  kg"
-                android:textSize="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:text="  kg"
+                android:textSize="20dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -292,13 +291,13 @@
                 android:layout_height="wrap_content"
                 android:hint="60"
                 android:textColor="#666666" />
+
             <TextView
                 android:id="@+id/profileTargetPeriodUnit"
-                android:text="  days"
-                android:textSize="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:text="  days"
+                android:textSize="20dp" />
         </LinearLayout>
 
         <!-- Measurement Preference -->
@@ -317,8 +316,8 @@
                 android:layout_marginEnd="8dp"
                 android:text="Weight Measurement Preference:"
                 android:textColor="#333333"
-                android:textStyle="bold"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/profileMeasurementPreference"
@@ -342,6 +341,42 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
+    <LinearLayout
+        android:id="@+id/syncContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- Sync Status Text -->
+        <TextView
+            android:id="@+id/sync_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="Last Sync: Never"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <!-- Sync Button -->
+        <Button
+            android:id="@+id/sync_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/black"
+            android:text="Sync Now"
+            android:textColor="@android:color/white" />
+
+        <!-- Sync Progress Bar -->
+        <ProgressBar
+            android:id="@+id/sync_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </LinearLayout>
 
