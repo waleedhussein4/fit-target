@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.fittarget.APIRequests.SignInRequest;
 import com.example.fittarget.APIResponses.SignInResponse;
+import com.example.fittarget.objects.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
