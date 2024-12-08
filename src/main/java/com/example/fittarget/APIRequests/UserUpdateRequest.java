@@ -1,19 +1,12 @@
 package com.example.fittarget.APIRequests;
 
-import com.google.gson.annotations.SerializedName;
-
 public class UserUpdateRequest {
     private Integer age;
     private Float weight;
     private Float height;
 
-    @SerializedName("target_weight") // Matches backend's snake_case field
     private Float targetWeight;
-
-    @SerializedName("target_period") // Matches backend's snake_case field
     private Integer targetPeriod;
-
-    @SerializedName("weight_measurement_preference") // Matches backend's snake_case field
     private String weightMeasurementPreference;
 
     // Getters and setters
