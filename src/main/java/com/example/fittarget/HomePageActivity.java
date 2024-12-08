@@ -3,6 +3,7 @@ package com.example.fittarget;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -108,17 +109,23 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void loadMostRecentWorkout() {
-        Map<String, String> recentWorkout = DB.getMostRecentWorkout();
+        Pair<Integer, Integer> recentWorkoutDetails = DB.getMostRecentWorkoutDetails();
         TextView recentWorkoutsText = findViewById(R.id.recentWorkoutsText);
-
-        if (recentWorkout.isEmpty()) {
+        if (recentWorkoutDetails== null) {
             recentWorkoutsText.setText("No recent workouts available.");
-        } else {
+            Log.d("RecentWorkout", "No workout data available.");
+        } else
+         {
+            int sets = recentWorkoutDetails.first; // Number of sets
+            int volume = recentWorkoutDetails.second; // Volume (weight lifted)
             StringBuilder workoutDetails = new StringBuilder();
             workoutDetails.append("Most Recent Workout:\n");
-            workoutDetails.append("Sets: ").append(recentWorkout.get("sets")).append("\n");
-            workoutDetails.append("Volume: ").append(recentWorkout.get("volume") + "kg");
+            workoutDetails.append("Sets: ").append(sets).append("\n");
+            workoutDetails.append("Volume: ").append(volume+ "kg");
             recentWorkoutsText.setText(workoutDetails.toString());
+            // Display or use the details
+            Log.d("RecentWorkout", "Sets: " + sets + ", Volume: " + volume);
+
         }
     }
 

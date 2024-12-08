@@ -180,9 +180,12 @@ public class LogWorkoutActivity extends AppCompatActivity {
 
     public void updateVolumeAndSets() {
         int[] values = getTotalVolumeAndSets();
+        currentWorkout.setSets(values[1]);  // Total Sets
+        currentWorkout.setVolume(values[0]);
 
         totalVolumeText.setText(values[0] + "kg");
         totalSetsText.setText(String.valueOf(values[1]));
+        DB.updateCurrentWorkoutStats(currentWorkout);
     }
 
     private void addExercise() {

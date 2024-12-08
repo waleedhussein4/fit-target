@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Pair;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -235,6 +236,17 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
+    public void updateCurrentWorkoutStats(Workout workout) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("SETS", workout.getSets());  // Update sets
+        values.put("VOLUME", workout.getVolume());  // Update volume
+
+        // Update the current workout row in the database
+        db.update("WORKOUT", values, "WORKOUT_ID = ?", new String[]{String.valueOf(CURRENT_WORKOUT_ID)});
+    }
+
 
     public Workout getUserCurrentWorkout() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -485,27 +497,27 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return weights;
     }
 
-    public Map<String, String> getMostRecentWorkout() {
+    public Pair<Integer, Integer> getMostRecentWorkoutDetails() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(
-                "SELECT strftime('%Y-%m-%d %H:%M:%S', START_DATE) AS FormattedStartDate, " +
-                        "strftime('%Y-%m-%d %H:%M:%S', END_DATE) AS FormattedEndDate, " +
-                        "SETS, VOLUME " +
-                        "FROM WORKOUT ORDER BY START_DATE DESC LIMIT 1",
-                null
-        );
+        Pair<Integer, Integer> workoutDetails = null;
 
-        Map<String, String> workoutDetails = new HashMap<>();
-        if (cursor.moveToFirst()) {
-            workoutDetails.put("startDate", cursor.getString(cursor.getColumnIndex("FormattedStartDate")));
-            workoutDetails.put("endDate", cursor.getString(cursor.getColumnIndex("FormattedEndDate")));
-            workoutDetails.put("sets", String.valueOf(cursor.getInt(cursor.getColumnIndex("SETS"))));
-            workoutDetails.put("volume", String.valueOf(cursor.getInt(cursor.getColumnIndex("VOLUME"))));
+        // Query to get the most recent workout
+        String query = "SELECT SETS, VOLUME FROM WORKOUT ORDER BY END_DATE DESC LIMIT 1";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // Retrieve the number of sets and volume
+            int sets = cursor.getInt(cursor.getColumnIndexOrThrow("SETS"));
+            int volume = cursor.getInt(cursor.getColumnIndexOrThrow("VOLUME"));
+
+            // Create a Pair to hold the values
+            workoutDetails = new Pair<>(sets, volume);
+            cursor.close();
         }
-        cursor.close();
-        db.close();
+
         return workoutDetails;
     }
+
 
     public int getTotalExercises() {
         SQLiteDatabase db = this.getReadableDatabase();
