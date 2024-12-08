@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.util.Pair;
 
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -96,7 +97,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         updateMyDatabase(db, oldVersion, newVersion);
@@ -169,14 +169,19 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
                     "HEIGHT FLOAT," +
                     "WEIGHT_MEASUREMENT_PREFERENCE TEXT," +
                     "WEIGHT_TARGET FLOAT," +
-                    "PERIOD_TARGET INTEGER)");
+                    "PERIOD_TARGET INTEGER," +
+                    "LAST_SYNC TEXT)"); // ISO 8601 format
+
 
             db.execSQL("CREATE TABLE WORKOUT (" +
                     "WORKOUT_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "UUID TEXT," +
                     "SETS INTEGER," +
                     "VOLUME INTEGER," +
-                    "START_DATE TEXT," +
-                    "END_DATE TEXT)");
+                    "START_DATE TEXT," + // ISO 8601 format
+                    "END_DATE TEXT," + // ISO 8601 format
+                    "CREATED_AT TEXT," + // ISO 8601 format
+                    "PENDING_UPLOAD INTEGER DEFAULT 1)");
 
             db.execSQL("CREATE TABLE EXERCISE (" +
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -199,6 +204,35 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public String getUserId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT USER_ID FROM USER LIMIT 1", null);
+
+        String userId = null;
+        if (cursor.moveToFirst()) {
+            userId = cursor.getString(cursor.getColumnIndex("USER_ID"));
+        }
+        cursor.close();
+        db.close();
+        return userId;
+    }
+
+    public String getLastLocalSync() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT LAST_SYNC FROM USER LIMIT 1", null);
+
+        String lastSync = null;
+        if (cursor.moveToFirst()) {
+            lastSync = cursor.getString(cursor.getColumnIndex("LAST_SYNC"));
+        }
+        cursor.close();
+        db.close();
+        if (lastSync == null) {
+            return "2024-12-08T15:58:00Z";
+        }
+        return lastSync;
+    }
+
     public void insertCurrentWorkout(Workout workout) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -212,10 +246,14 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         // Insert workout data
         ContentValues workoutValues = new ContentValues();
         workoutValues.put("WORKOUT_ID", CURRENT_WORKOUT_ID);
+        workoutValues.put("UUID", workout.getUUID());
         workoutValues.put("SETS", workout.getSets());
         workoutValues.put("VOLUME", workout.getVolume());
         workoutValues.put("START_DATE", String.valueOf(workout.getStartDate().getTime()));
         workoutValues.put("END_DATE", workout.getEndDate() != null ? String.valueOf(workout.getEndDate().getTime()) : null);
+        workoutValues.put("CREATED_AT", String.valueOf(System.currentTimeMillis()));
+        workoutValues.put("PENDING_UPLOAD", 1);
+
         db.insert("WORKOUT", null, workoutValues);
 
         // Insert exercises and their sets
@@ -306,6 +344,7 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues workoutValues = new ContentValues();
+        workoutValues.put("UUID", workout.getUUID());
         workoutValues.put("SETS", workout.getSets());
         workoutValues.put("VOLUME", workout.getVolume());
         workoutValues.put("START_DATE", String.valueOf(workout.getStartDate().getTime()));
@@ -403,7 +442,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return details;
     }
 
-
     public Map<String, Integer> getMuscleGroupFrequency() {
         SQLiteDatabase db = this.getReadableDatabase();
         Map<String, Integer> frequencyMap = new HashMap<>();
@@ -424,7 +462,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return frequencyMap;
     }
-
 
     // Retrieve weight lifted over time for a muscle group for line chart
     public Map<String, Integer> getWeightOverTime(String muscleGroup) {
@@ -451,7 +488,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return weightMap;
     }
-
 
     public List<String> getDistinctBodyParts() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -534,7 +570,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return totalExercises;
     }
-
 
     public String getMostActiveDay() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -662,7 +697,6 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
         return rowsUpdated > 0; // Return true if at least one row was updated
     }
 
-
     public String getLastWeightEntryDate() {
         SQLiteDatabase db = this.getReadableDatabase();
         String lastDate = null;
@@ -732,6 +766,48 @@ public class FitTargetDatabaseHelper extends SQLiteOpenHelper {
 
         db.insert("WEIGHT_RECORD", null, contentValues);  // Insert the record into the 'weight_records' table
         db.close();
+    }
+
+    public void markWorkoutAsUnsynced(int workoutId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("IS_SYNCED", 0);
+        values.put("LAST_UPDATED", String.valueOf(System.currentTimeMillis()));
+        db.update("WORKOUT", values, "WORKOUT_ID = ?", new String[]{String.valueOf(workoutId)});
+        db.close();
+    }
+
+    public void markWorkoutAsSynced(int workoutId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("IS_SYNCED", 1);
+        values.put("LAST_UPDATED", String.valueOf(System.currentTimeMillis()));
+        db.update("WORKOUT", values, "WORKOUT_ID = ?", new String[]{String.valueOf(workoutId)});
+        db.close();
+    }
+
+    public List<Map<String, String>> getWorkoutsPendingUpload() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT UUID, CREATED_AT FROM WORKOUT WHERE PENDING_UPLOAD = 1", null);
+
+        List<Map<String, String>> pendingWorkouts = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                Map<String, String> workout = new HashMap<>();
+                workout.put("UUID", cursor.getString(cursor.getColumnIndex("UUID")));
+                workout.put("CREATED_AT", cursor.getString(cursor.getColumnIndex("CREATED_AT")));
+                pendingWorkouts.add(workout);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return pendingWorkouts;
+    }
+
+    public List<Object> getFoodEntriesPendingUpload() {
+        List<Object> pendingFoodEntries = new ArrayList<>();
+
+        return pendingFoodEntries;
     }
 }
 

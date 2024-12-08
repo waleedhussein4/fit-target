@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Workout {
+    private String UUID;
     private int sets;
     private int volume;
     private Date startDate;
@@ -12,12 +13,16 @@ public class Workout {
     private List<Exercise> exercises;
 
     public Workout() {
+        this.UUID = java.util.UUID.randomUUID().toString();
         this.startDate = new Date();
         this.endDate = null;
         this.sets = 0;
         this.volume = 0;
         this.exercises = new ArrayList<>();
     }
+
+    public String getUUID() { return UUID; }
+    public void setUUID(String UUID) { this.UUID = UUID; }
 
     public int getVolume() { return volume; }
     public void setVolume(int volume) { this.volume = volume; }

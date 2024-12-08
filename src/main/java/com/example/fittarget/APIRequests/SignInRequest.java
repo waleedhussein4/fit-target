@@ -1,4 +1,4 @@
-package com.example.fittarget;
+package com.example.fittarget.APIRequests;
 
 public class SignInRequest {
     private String email;

@@ -1,4 +1,4 @@
-package com.example.fittarget;
+package com.example.fittarget.APIResponses;
 
 public class SignInResponse {
     private String message;
