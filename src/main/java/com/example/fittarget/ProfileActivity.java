@@ -2,7 +2,6 @@ package com.example.fittarget;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,14 +16,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.fittarget.APIRequests.UserUpdateRequest;
 import com.example.fittarget.APIRequests.SyncCheckRequest;
 import com.example.fittarget.APIResponses.SyncStatusResponse;
 import com.example.fittarget.APIServices.SyncService;
+import com.example.fittarget.objects.User;
 
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
     FitTargetDatabaseHelper DB = new FitTargetDatabaseHelper(this);
@@ -104,29 +106,48 @@ public class ProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
             try {
                 // Retrieve updated values
-                String updatedFirstName = firstNameText.getText().toString();
-                String updatedLastName = lastNameText.getText().toString();
-                String updatedEmail = emailText.getText().toString();
                 int updatedAge = Integer.parseInt(ageEditText.getText().toString());
                 float updatedHeight = Float.parseFloat(heightEditText.getText().toString());
                 float updatedWeight = Float.parseFloat(weightEditText.getText().toString());
-                String updatedGender = genderText.getText().toString();
                 float updatedWeightTarget = Float.parseFloat(weightTargetEditText.getText().toString());
                 int updatedPeriodTarget = Integer.parseInt(periodTargetEditText.getText().toString());
                 String updatedMeasurementPreference = measurementPreferenceSpinner.getSelectedItem().toString();
 
-                // Update database
-                boolean success = DB.updateLocalUser(
-                        updatedFirstName, updatedLastName, updatedEmail, updatedAge,
-                        updatedHeight, updatedWeight, updatedGender,
-                        updatedWeightTarget, updatedPeriodTarget, updatedMeasurementPreference
-                );
+                // Create a UserUpdateRequest object
+                UserUpdateRequest updateRequest = new UserUpdateRequest();
+                updateRequest.setAge(updatedAge);
+                updateRequest.setHeight(updatedHeight);
+                updateRequest.setWeight(updatedWeight);
+                updateRequest.setTargetWeight(updatedWeightTarget);
+                updateRequest.setTargetPeriod(updatedPeriodTarget);
+                updateRequest.setWeightMeasurementPreference(updatedMeasurementPreference);
 
-                if (success) {
-                    Toast.makeText(ProfileActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ProfileActivity.this, "Error updating profile.", Toast.LENGTH_SHORT).show();
-                }
+                // Make API call to update the profile
+                String userEmail = userInfo.get("EMAIL");
+                RetrofitClient.getInstance().getUserService().updateUserProfile(userEmail, updateRequest).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            // Update local database with new values
+                            DB.updateLocalUser(
+                                    userInfo.get("FIRST_NAME"), userInfo.get("LAST_NAME"), userEmail,
+                                    updatedAge, updatedHeight, updatedWeight,
+                                    userInfo.get("GENDER"), updatedWeightTarget,
+                                    updatedPeriodTarget, updatedMeasurementPreference
+                            );
+
+                            Toast.makeText(ProfileActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProfileActivity.this, "Failed to update profile.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(ProfileActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             } catch (Exception e) {
                 Toast.makeText(ProfileActivity.this, "Invalid input. Please check your entries.", Toast.LENGTH_SHORT).show();
             }
@@ -167,5 +188,4 @@ public class ProfileActivity extends AppCompatActivity {
         syncStatus.setText(message);
         syncButton.setEnabled(false); // Disable button on failure
     }
-
 }
