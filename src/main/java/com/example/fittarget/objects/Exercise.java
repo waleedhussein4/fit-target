@@ -3,6 +3,7 @@ package com.example.fittarget.objects;
 import android.content.Context;
 
 import com.example.fittarget.FitTargetDatabaseHelper;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,20 +11,42 @@ import java.util.List;
 import java.util.Map;
 
 public class Exercise implements Serializable {
+    @SerializedName("uuid")
+    private String UUID;
+
+    @SerializedName("workout_uuid")
+    private String workoutUUID;
+
+    @SerializedName("reference_id")
     private int referenceId;
+
+    @SerializedName("sets")
     private List<Set> sets;
+
     private FitTargetDatabaseHelper DB;
 
-    public Exercise(int referenceId, Context context) {
+    public Exercise(String workoutUUID, int referenceId, Context context) {
+        this.UUID = java.util.UUID.randomUUID().toString();
+        this.workoutUUID = workoutUUID;
         this.sets = new ArrayList<>();
         this.referenceId = referenceId;
         DB = new FitTargetDatabaseHelper(context);
     }
 
-    public Exercise(int referenceId, List<Set> sets, Context context) {
-        this.referenceId = referenceId;
-        this.sets = sets;
-        DB = new FitTargetDatabaseHelper(context);
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
+
+    public String getWorkoutUUID() {
+        return workoutUUID;
+    }
+
+    public void setWorkoutUUID(String workoutUUID) {
+        this.workoutUUID = workoutUUID;
     }
 
     public List<Set> getSets() {
@@ -63,19 +86,41 @@ public class Exercise implements Serializable {
     }
 
     public static class Set {
+        @SerializedName("uuid")
+        private String UUID;
+
+        @SerializedName("exercise_uuid")
+        private String ExerciseUUID;
+
+        @SerializedName("weight")
         private int weight;
+
+        @SerializedName("reps")
         private int reps;
+
+        @SerializedName("index_in_exercise")
         private int indexInEx;
 
-        public Set(int weight, int reps, int index) {
+        public Set(String exerciseUUID, int weight, int reps, int index) {
+            this.UUID = java.util.UUID.randomUUID().toString();
+            this.ExerciseUUID = exerciseUUID;
             this.weight = weight;
             this.reps = reps;
             this.indexInEx = index;
         }
 
         public Set() {
+            this.UUID = java.util.UUID.randomUUID().toString();
             this.weight = 0;
             this.reps = 0;
+        }
+
+        public String getUUID() {
+            return UUID;
+        }
+
+        public void setUUID(String UUID) {
+            this.UUID = UUID;
         }
 
         public int getWeight() {

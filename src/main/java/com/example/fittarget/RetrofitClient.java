@@ -7,6 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.example.fittarget.APIServices.SyncService;
 import com.example.fittarget.APIServices.userService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class RetrofitClient {
     private static RetrofitClient instance = null;
@@ -19,9 +21,14 @@ public class RetrofitClient {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
+
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                .create();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://fit-target-backend.vercel.app/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build())
                 .build();
         userService = retrofit.create(userService.class);

@@ -18,6 +18,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.fittarget.APIRequests.UserUpdateRequest;
 import com.example.fittarget.APIRequests.SyncCheckRequest;
+import com.example.fittarget.APIRequests.SyncRequest;
+import com.example.fittarget.APIResponses.SyncResponse;
 import com.example.fittarget.APIResponses.SyncStatusResponse;
 import com.example.fittarget.APIServices.SyncService;
 import com.example.fittarget.objects.User;
@@ -33,7 +35,6 @@ public class ProfileActivity extends AppCompatActivity {
     Map<String, String> userInfo;
     private TextView syncStatus;
     private Button syncButton;
-    private ProgressBar syncProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
         Spinner measurementPreferenceSpinner = findViewById(R.id.profileMeasurementPreference);
         syncStatus = findViewById(R.id.sync_status);
         syncButton = findViewById(R.id.sync_button);
-        syncProgressBar = findViewById(R.id.sync_progress_bar);
+        syncButton.setOnClickListener(v -> sync());
 
         // Set values for text fields
         firstNameText.setText(userInfo.get("FIRST_NAME"));
@@ -187,5 +188,33 @@ public class ProfileActivity extends AppCompatActivity {
     private void handleSyncError(String message) {
         syncStatus.setText(message);
         syncButton.setEnabled(false); // Disable button on failure
+    }
+
+    private void sync() {
+        Log.d("Sync", "Syncing data...");
+        SyncRequest syncRequest = new SyncRequest(DB);
+
+        syncButton.setEnabled(false);
+
+        RetrofitClient.getInstance().getSyncService().syncAllData(syncRequest).enqueue(new retrofit2.Callback<SyncResponse>() {
+            @Override
+            public void onResponse(Call<SyncResponse> call, retrofit2.Response<SyncResponse> response) {
+                if (response.isSuccessful()) {
+                    syncStatus.setText("Sync successful.");
+                    syncButton.setEnabled(false);
+
+                    DB.updateLastLocalSync();
+                    DB.markPendingWorkoutsAsUploaded();
+                } else {
+                    handleSyncError("Failed to sync data.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SyncResponse> call, Throwable t) {
+                syncButton.setEnabled(true);
+                handleSyncError("Error: Unable to sync data.");
+            }
+        });
     }
 }

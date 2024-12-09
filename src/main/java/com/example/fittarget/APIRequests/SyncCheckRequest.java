@@ -8,7 +8,7 @@ import java.util.Map;
 public class SyncCheckRequest {
     private String userId;
     private List<Map<String, String>> workoutsPendingUpload;
-    private List<Object> foodEntriesPendingUpload;
+    private List<Map<String, String>> foodEntriesPendingUpload;
     private String lastLocalSync;
 
     public SyncCheckRequest(FitTargetDatabaseHelper DB) {
