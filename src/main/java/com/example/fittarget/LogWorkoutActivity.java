@@ -112,7 +112,7 @@ public class LogWorkoutActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SELECT_EXERCISE && resultCode == RESULT_OK) {
             int selectedExerciseReferenceId = data.getIntExtra("selectedExerciseReferenceId", 0);
-            Exercise selectedExercise = new Exercise(selectedExerciseReferenceId, this);
+            Exercise selectedExercise = new Exercise(currentWorkout.getUUID(), selectedExerciseReferenceId, this);
 
             // initialize with first set, empty
             selectedExercise.addSet(new Exercise.Set());

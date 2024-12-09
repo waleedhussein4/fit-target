@@ -369,13 +369,6 @@
             android:text="Sync Now"
             android:textColor="@android:color/white" />
 
-        <!-- Sync Progress Bar -->
-        <ProgressBar
-            android:id="@+id/sync_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>
